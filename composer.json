@@ -1,0 +1,17 @@
+{
+    "name": "mihaildev/yii2-elfinder",
+    "keywords": ["yii", "elfinder", "filemanager"],
+    "type": "yii2-extension",
+    "authors": [
+        {
+            "name": "Mihail",
+            "email": "mihail.kucher@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"mihaildev\\elfinder\\": ""}
+    },
+    "require": {
+        "yiisoft/yii2-jui": "*"
+    }
+}
