@@ -52,10 +52,31 @@ echo $form->field($model, 'attribute')->widget(InputFile::className(), [
 ]);
 
 echo ElFinder::widget([
-                        'language' => 'ru',
-                        'controller' => 'elfinder', //вставляем название контроллера по умолчанию равен elfinder
-                        'filter' => 'image', //филтер файлов, можно задать масив филтров  https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#wiki-onlyMimes
-                        'callbackFunction' => new JsExpression('function(file, id){}')// id - id виджета
-                      ]);
+    'language' => 'ru',
+    'controller' => 'elfinder', //вставляем название контроллера по умолчанию равен elfinder
+    'filter' => 'image', //филтер файлов, можно задать масив филтров  https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#wiki-onlyMimes
+    'callbackFunction' => new JsExpression('function(file, id){}')// id - id виджета
+]);
 
+```
+
+## CKEditor
+```php
+use mihaildev/elfinder/Widget as ElFinder;
+
+$ckeditorOptions = ElFinder::ckeditorOptions($controller,[//Some CKEditor Options]);
+
+```
+
+Использование совместно с приложение "mihaildev/yii2-ckeditor" (https://github.com/MihailDev/yii2-ckeditor)
+
+```php
+use mihaildev/ckeditor/Widget as CKEditor;
+use mihaildev/elfinder/Widget as ElFinder;
+
+$form->field($model, 'attribute')->widget(CKEditor::className(), [
+  ...
+  'editorOptions' => ElFinder::ckeditorOptions('elfinder',[//Some CKEditor Options]),
+  ...
+]);
 ```
