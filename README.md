@@ -35,7 +35,7 @@
 ```php
 use mihaildev/elfinder/InputFile;
 use mihaildev/elfinder/Widget as ElFinder;
-use \yii\web\JsExpression;
+use yii/web/JsExpression;
 
 echo InputFile::widget([
     'language' => 'ru',
