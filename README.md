@@ -80,3 +80,7 @@ $form->field($model, 'attribute')->widget(CKEditor::className(), [
   ...
 ]);
 ```
+
+## Полезные ссылки
+
+ElFinder Wiki - https://github.com/Studio-42/elFinder/wiki
