@@ -11,13 +11,13 @@ ElFinder — файловый менеджер для сайта.
 Либо запустить
 
 ```
-php composer.phar require --prefer-dist yiisoft/yii2-imagine "*"
+php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
 ```
 
 или добавить
 
 ```json
-"yiisoft/yii2-imagine": "*"
+"mihaildev/yii2-elfinder": "*"
 ```
 
 в разделе `require` вашего composer.json файла.
