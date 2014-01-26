@@ -1,3 +1,27 @@
+ElFinder Расширение для Yii 2
+===========================
+
+ElFinder — файловый менеджер для сайта.
+
+
+## Установка
+
+Удобнее всего установить это расширение через [composer](http://getcomposer.org/download/).
+
+Либо запустить
+
+```
+php composer.phar require --prefer-dist yiisoft/yii2-imagine "*"
+```
+
+или добавить
+
+```json
+"yiisoft/yii2-imagine": "*"
+```
+
+в разделе `require` вашего composer.json файла.
+
 ## Настройка
 
 ```php
