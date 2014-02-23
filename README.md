@@ -58,7 +58,7 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
 
 ```php
 use mihaildev/elfinder/InputFile;
-use mihaildev/elfinder/Widget as ElFinder;
+use mihaildev/elfinder/ElFinder;
 use yii/web/JsExpression;
 
 echo InputFile::widget([
@@ -86,7 +86,7 @@ echo ElFinder::widget([
 
 ## CKEditor
 ```php
-use mihaildev/elfinder/Widget as ElFinder;
+use mihaildev/elfinder/ElFinder;
 
 $ckeditorOptions = ElFinder::ckeditorOptions($controller,[//Some CKEditor Options]);
 
@@ -95,8 +95,8 @@ $ckeditorOptions = ElFinder::ckeditorOptions($controller,[//Some CKEditor Option
 Использование совместно с приложение "mihaildev/yii2-ckeditor" (https://github.com/MihailDev/yii2-ckeditor)
 
 ```php
-use mihaildev/ckeditor/Widget as CKEditor;
-use mihaildev/elfinder/Widget as ElFinder;
+use mihaildev/ckeditor/CKEditor;
+use mihaildev/elfinder/ElFinder;
 
 $form->field($model, 'attribute')->widget(CKEditor::className(), [
   ...

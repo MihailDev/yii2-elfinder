@@ -34,7 +34,7 @@ class Assets extends AssetBundle
      * @param \yii\web\View $view
      */
     public static function addLangFile($lang, $view){
-        $lang = Widget::getSupportedLanguage($lang);
+        $lang = ElFinder::getSupportedLanguage($lang);
 
         if ($lang !== false){
             list(,$path) = \Yii::$app->assetManager->publish(__DIR__."/assets");

@@ -19,7 +19,7 @@ use yii\base\InvalidConfigException;
  * @property \mihaildev\elfinder\Component|string $elfinder
  */
 
-class Widget extends BaseWidjet{
+class ElFinder extends BaseWidjet{
 
     public $language;
 
@@ -49,12 +49,6 @@ class Widget extends BaseWidjet{
         if(empty($this->language))
             $this->language = self::getSupportedLanguage(Yii::$app->language);
 
-        $container = 'div';
-        if(isset($this->containerOptions['tag'])){
-            $container = $this->containerOptions['tag'];
-            unset($this->containerOptions['tag']);
-        }
-
         $managerOptions = [];
         if(!empty($this->filter))
             $managerOptions['filter'] = $this->filter;
@@ -69,9 +63,6 @@ class Widget extends BaseWidjet{
         if(!isset($this->frameOptions['style'])){
             $this->frameOptions['style'] = "width: 100%; height: 100%; border: 0;";
         }
-
-        echo Html::tag($container, Html::tag('iframe','', $this->frameOptions), $this->containerOptions);
-
     }
 
     static function getSupportedLanguage($languge)
@@ -93,6 +84,14 @@ class Widget extends BaseWidjet{
 
     public function run()
     {
+        $container = 'div';
+        if(isset($this->containerOptions['tag'])){
+            $container = $this->containerOptions['tag'];
+            unset($this->containerOptions['tag']);
+        }
+
+        echo Html::tag($container, Html::tag('iframe','', $this->frameOptions), $this->containerOptions);
+
         if(!empty($this->callbackFunction)){
             AssetsCallBack::register($this->getView());
             $this->getView()->registerJs("ElFinderFileCallback.register(".Json::encode($this->id).",".Json::encode($this->callbackFunction).");");

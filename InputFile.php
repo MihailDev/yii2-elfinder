@@ -37,7 +37,7 @@ class InputFile extends InputWidget{
         parent::init();
 
         if(empty($this->language))
-            $this->language = Widget::getSupportedLanguage(Yii::$app->language);
+            $this->language = ElFinder::getSupportedLanguage(Yii::$app->language);
 
         if(empty($this->buttonOptions['id']))
             $this->buttonOptions['id'] = $this->options['id'].'_button';
@@ -52,7 +52,7 @@ class InputFile extends InputWidget{
 
         $managerOptions['lang'] = $this->language;
 
-        $this->_managerOptions['url'] = Widget::getManagerUrl($this->controller, $managerOptions);
+        $this->_managerOptions['url'] = ElFinder::getManagerUrl($this->controller, $managerOptions);
         $this->_managerOptions['width'] = $this->width;
         $this->_managerOptions['height'] = $this->height;
         $this->_managerOptions['id'] = $this->options['id'];
