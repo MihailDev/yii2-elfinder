@@ -76,7 +76,7 @@ class Controller extends BaseController{
         $options = [
             'url'=> $this->createUrl('connect'),
             'customData' => [
-                Yii::$app->request->csrfVar => Yii::$app->request->csrfToken
+                Yii::$app->request->csrfParam => Yii::$app->request->csrfToken
             ],
             'resizable' => false
         ];
