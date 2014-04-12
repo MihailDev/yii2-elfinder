@@ -5,6 +5,7 @@
     "homepage": "https://github.com/MihailDev/yii2-elfinder",
     "type": "yii2-extension",
     "license": "BSD-3-Clause",
+	"minimum-stability": "dev",
     "authors": [
         {
             "name": "Mihail",

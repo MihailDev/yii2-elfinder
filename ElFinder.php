@@ -11,12 +11,10 @@ use yii\base\Widget as BaseWidjet;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\base\InvalidConfigException;
 
 /**
  * Class Widget
  * @package mihaildev\elfinder
- * @property \mihaildev\elfinder\Component|string $elfinder
  */
 
 class ElFinder extends BaseWidjet{
@@ -33,7 +31,8 @@ class ElFinder extends BaseWidjet{
 
     public static function getManagerUrl($controller, $params = [])
     {
-        return Yii::$app->urlManager->createUrl('/'.$controller."/manager", $params);
+		$params[0] = '/'.$controller."/manager";
+        return Yii::$app->urlManager->createUrl($params);
     }
 
     public static function ckeditorOptions($controller, $options = []){

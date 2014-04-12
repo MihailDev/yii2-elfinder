@@ -1,10 +1,7 @@
 <?php
 /**
- * Date: 20.01.14
- * Time: 14:56
+ * @var array $options
  */
-
-
 
 require_once(__DIR__ . '/../php/elFinderConnector.class.php');
 require_once(__DIR__ . '/../php/elFinder.class.php');
