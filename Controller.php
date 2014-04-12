@@ -10,6 +10,7 @@ namespace mihaildev\elfinder;
 
 use Yii;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\Controller as BaseController;
 use yii\web\JsExpression;
 use yii\web\NotFoundHttpException;
@@ -74,7 +75,7 @@ class Controller extends BaseController{
             throw new NotFoundHttpException;
 
         $options = [
-            'url'=> $this->createUrl('connect'),
+            'url'=> Url::toRoute('connect'),
             'customData' => [
                 Yii::$app->request->csrfParam => Yii::$app->request->csrfToken
             ],
