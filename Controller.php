@@ -9,11 +9,12 @@
 namespace mihaildev\elfinder;
 
 use Yii;
+use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Controller as BaseController;
 use yii\web\JsExpression;
-use yii\web\NotFoundHttpException;
+
 
 
 /**
@@ -25,17 +26,24 @@ use yii\web\NotFoundHttpException;
 
 class Controller extends BaseController{
     public $roots = [];
-    public $access = '*';
+    public $access = ['*'];
     public $disabledCommands = ['netmount'];
 
-    public function isAvailable(){
-        if($this->access == '*' || Yii::$app->user->checkAccess($this->access)){
-            if(!empty($this->options['roots']))
-                return true;
-        }
-
-        return false;
+    public function behaviors()
+    {
+      return [
+        'access' => [
+          'class' => AccessControl::className(),
+          'rules' => [
+            [
+              'allow' => true,
+              'roles' => $this->access,
+            ],
+          ],
+        ],
+      ];
     }
+
 
     private $_options;
 
@@ -65,14 +73,10 @@ class Controller extends BaseController{
     }
 
     public function actionConnect(){
-        if(!$this->isAvailable())
-            throw new NotFoundHttpException;
-        return $this->renderFile(__DIR__."/views/connect.php", ['options'=>$this->getOptions()]);
+       return $this->renderFile(__DIR__."/views/connect.php", ['options'=>$this->getOptions()]);
     }
 
     public function actionManager(){
-        if(!$this->isAvailable())
-            throw new NotFoundHttpException;
 
         $options = [
             'url'=> Url::toRoute('connect'),
