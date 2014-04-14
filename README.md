@@ -28,7 +28,7 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
 'controllerMap' => [
         'elfinder' => [
             'class' => 'mihaildev\elfinder\Controller',
-            'access' => '*', //глобальный доступ к фаил менеджеру * - для всех
+            'access' => ['*'], //глобальный доступ к фаил менеджеру * - для всех
             'disabledCommands' => ['netmount'], //отключение ненужных команд https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#commands
             'roots' => [
                 [
