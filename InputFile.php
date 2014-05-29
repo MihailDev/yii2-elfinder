@@ -23,7 +23,7 @@ class InputFile extends InputWidget{
     public $buttonName = 'Browse';
     public $buttonOptions = [];
 
-    private $_managerOptions;
+    protected $_managerOptions;
 
     public $width = 'auto';
     public $height = 'auto';
