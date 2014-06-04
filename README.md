@@ -28,7 +28,7 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
 'controllerMap' => [
         'elfinder' => [
             'class' => 'mihaildev\elfinder\Controller',
-            'access' => ['*'], //глобальный доступ к фаил менеджеру * - для всех
+            'access' => ['@'], //глобальный доступ к фаил менеджеру @ - для авторизорованных , ? - для гостей , чтоб открыть всем ['@', '?']
             'disabledCommands' => ['netmount'], //отключение ненужных команд https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#commands
             'roots' => [
                 [
@@ -73,6 +73,9 @@ echo $form->field($model, 'attribute')->widget(InputFile::className(), [
   'language' => 'ru',
   'controller' => 'elfinder', //вставляем название контроллера по умолчанию равен elfinder
   'filter' => 'image', //филтер файлов, можно задать масив филтров  https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#wiki-onlyMimes
+  'template' => '<div class="input-group">{input}<span class="input-group-btn">{button}</span></div>',
+  'options'=> ['class'=> 'form-control'],
+  'buttonOptions'=> ['class'=> 'btn btn-default'],
 ]);
 
 echo ElFinder::widget([

@@ -7,7 +7,6 @@
 namespace mihaildev\elfinder;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\widgets\InputWidget;
@@ -70,6 +69,7 @@ class InputFile extends InputWidget{
         }
 
         $replace['{button}'] = Html::button($this->buttonName, $this->buttonOptions);
+
 
         echo strtr($this->template, $replace);
 

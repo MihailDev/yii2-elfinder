@@ -26,7 +26,7 @@ use yii\web\JsExpression;
 
 class Controller extends BaseController{
     public $roots = [];
-    public $access = ['*'];
+    public $access = ['@'];
     public $disabledCommands = ['netmount'];
 
     public function behaviors()
