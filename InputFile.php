@@ -31,6 +31,8 @@ class InputFile extends InputWidget{
 
     public $controller = 'elfinder';
 
+    public $multiple;
+
     public function init()
     {
         parent::init();
@@ -50,6 +52,9 @@ class InputFile extends InputWidget{
         $managerOptions['callback'] = $this->options['id'];
 
         $managerOptions['lang'] = $this->language;
+
+        if (!empty($this->multiple))
+            $managerOptions['multiple'] = $this->multiple;
 
         $this->_managerOptions['url'] = ElFinder::getManagerUrl($this->controller, $managerOptions);
         $this->_managerOptions['width'] = $this->width;
@@ -75,8 +80,9 @@ class InputFile extends InputWidget{
 
         AssetsCallBack::register($this->getView());
 
-        $this->getView()->registerJs("ElFinderFileCallback.register(".Json::encode($this->options['id']).", function(file, id){ \$('#' + id).val(file.url); return true;}); $('#".$this->buttonOptions['id']."').click(function(){ElFinderFileCallback.openManager(".Json::encode($this->_managerOptions).");});");
-
+        if (!empty($this->multiple))
+            $this->getView()->registerJs("ElFinderFileCallback.register(".Json::encode($this->options['id']).", function(files, id){ var _f = []; for (var i in files) { _f.push(files[i].url); } \$('#' + id).val(_f.join(', ')); return true;}); $('#".$this->buttonOptions['id']."').click(function(){ElFinderFileCallback.openManager(".Json::encode($this->_managerOptions).");});");
+        else
+            $this->getView()->registerJs("ElFinderFileCallback.register(".Json::encode($this->options['id']).", function(file, id){ \$('#' + id).val(file.url); return true;}); $('#".$this->buttonOptions['id']."').click(function(){ElFinderFileCallback.openManager(".Json::encode($this->_managerOptions).");});");
     }
-
-} 
+}
