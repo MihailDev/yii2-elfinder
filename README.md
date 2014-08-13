@@ -32,6 +32,8 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
             'disabledCommands' => ['netmount'], //отключение ненужных команд https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#commands
             'roots' => [
                 [
+                    'baseUrl'=>'@web',
+                    'basePath'=>'@webroot',
                     'path' => 'files/global',
                     'name' => 'Global'
                 ],
