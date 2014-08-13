@@ -10,6 +10,8 @@ use Yii;
 
 class LocalPath extends BasePath{
     public $path;
+    public $baseUrl;
+    public $basePath;
 
     public $name = 'Root';
 
@@ -18,11 +20,11 @@ class LocalPath extends BasePath{
     public $access = ['read' => '*', 'write' => '*'];
 
     public function getUrl(){
-        return Yii::getAlias('@web/'.trim($this->path,'/'));
+        return Yii::getAlias($this->baseUrl.'/'.trim($this->path,'/'));
     }
 
     public function getRealPath(){
-        $path = Yii::getAlias('@webroot/'.trim($this->path,'/'));
+        $path = Yii::getAlias($this->basePath.'/'.trim($this->path,'/'));
         if(!is_dir($path))
             mkdir($path, 0777, true);
 

@@ -43,7 +43,7 @@ class BasePath extends BaseComponent{
         if(isset($this->access['write'])){
             $this->_defults['write'] = true;
             if($this->access['write'] != '*'){
-                $this->_defults['write'] = Yii::$app->user->checkAccess($this->access['write']);
+                $this->_defults['write'] = Yii::$app->user->can($this->access['write']);
             }
         }
 
@@ -52,7 +52,7 @@ class BasePath extends BaseComponent{
         }elseif(isset($this->access['read'])){
             $this->_defults['read'] = true;
             if($this->access['read'] != '*'){
-                $this->_defults['read'] = Yii::$app->user->checkAccess($this->access['read']);
+                $this->_defults['read'] = Yii::$app->user->can($this->access['read']);
             }
         }
 
