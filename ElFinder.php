@@ -68,7 +68,7 @@ class ElFinder extends BaseWidjet{
     static function getSupportedLanguage($languge)
     {
         $supportedLangs = array('bg', 'jp', 'sk', 'cs', 'ko', 'th', 'de', 'lv', 'tr', 'el', 'nl', 'uk',
-            'es', 'no', 'vi', 'fr', 'pl', 'zh_CN', 'hr', 'pt_BR', 'zh_TW', 'hu', 'ro', 'it', 'ru');
+            'es', 'no', 'vi', 'fr', 'pl', 'zh_CN', 'hr', 'pt_BR', 'zh_TW', 'hu', 'ro', 'it', 'ru', 'en');
 
         if(!in_array($languge, $supportedLangs)){
             if (strpos($languge, '_')) {
