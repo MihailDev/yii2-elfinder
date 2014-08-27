@@ -51,7 +51,8 @@ class InputFile extends InputWidget{
 
         $managerOptions['callback'] = $this->options['id'];
 
-        $managerOptions['lang'] = $this->language;
+		if(!empty($this->language))
+			$managerOptions['lang'] = $this->language;
 
         if (!empty($this->multiple))
             $managerOptions['multiple'] = $this->multiple;

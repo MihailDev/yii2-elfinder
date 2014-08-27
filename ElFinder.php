@@ -55,7 +55,8 @@ class ElFinder extends BaseWidjet{
         if(!empty($this->callbackFunction))
             $managerOptions['callback'] = $this->id;
 
-        $managerOptions['lang'] = $this->language;
+		if(!empty($this->language))
+			$managerOptions['lang'] = $this->language;
 
         $this->frameOptions['src'] = $this->getManagerUrl($this->controller, $managerOptions);
 
