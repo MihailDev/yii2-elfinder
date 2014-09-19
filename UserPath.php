@@ -19,12 +19,12 @@ class UserPath extends LocalPath{
 
     public function getUrl(){
         $path = strtr($this->path, ['{id}'=>Yii::$app->user->id]);
-        return Yii::getAlias('@web/'.trim($path,'/'));
+        return Yii::getAlias($this->baseUrl.'/'.trim($path,'/'));
     }
 
     public function getRealPath(){
         $path = strtr($this->path, ['{id}'=>Yii::$app->user->id]);
-        $path = Yii::getAlias('@webroot/'.trim($path,'/'));
+        $path = Yii::getAlias($this->basePath.'/'.trim($path,'/'));
         if(!is_dir($path))
             mkdir($path, 0777, true);
 

@@ -10,8 +10,8 @@ use Yii;
 
 class LocalPath extends BasePath{
     public $path;
-    public $baseUrl;
-    public $basePath;
+    public $baseUrl = '@web';
+    public $basePath = '@webroot';
 
     public $name = 'Root';
 
