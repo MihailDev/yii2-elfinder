@@ -65,21 +65,21 @@ class ElFinder extends BaseWidjet{
         }
     }
 
-    static function getSupportedLanguage($languge)
+    static function getSupportedLanguage($language)
     {
-        $supportedLangs = array('bg', 'jp', 'sk', 'cs', 'ko', 'th', 'de', 'lv', 'tr', 'el', 'nl', 'uk',
+        $supportedLanguages = array('bg', 'jp', 'sk', 'cs', 'ko', 'th', 'de', 'lv', 'tr', 'el', 'nl', 'uk',
             'es', 'no', 'vi', 'fr', 'pl', 'zh_CN', 'hr', 'pt_BR', 'zh_TW', 'hu', 'ro', 'it', 'ru', 'en');
 
-        if(!in_array($languge, $supportedLangs)){
-            if (strpos($languge, '_')) {
-                $languge = substr($languge, 0, strpos($languge, '_'));
-                if (!in_array($languge, $supportedLangs)) $languge = false;
+        if(!in_array($language, $supportedLanguages)){
+            if (strpos($language, '_')) {
+                $language = substr($language, 0, strpos($language, '_'));
+                if (!in_array($language, $supportedLanguages)) $language = false;
             } else {
-                $languge = false;
+                $language = false;
             }
         }
 
-        return $languge;
+        return $language;
     }
 
     public function run()
