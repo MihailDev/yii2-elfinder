@@ -19,6 +19,7 @@ class InputFile extends InputWidget{
 
     public $filter;
 
+    public $buttonTag = 'button';
     public $buttonName = 'Browse';
     public $buttonOptions = [];
 
@@ -74,7 +75,7 @@ class InputFile extends InputWidget{
             $replace['{input}'] = Html::textInput($this->name, $this->value, $this->options);
         }
 
-        $replace['{button}'] = Html::button($this->buttonName, $this->buttonOptions);
+        $replace['{button}'] = Html::tag($this->buttonTag,$this->buttonName, $this->buttonOptions);
 
 
         echo strtr($this->template, $replace);
