@@ -32,7 +32,7 @@ class Assets extends AssetBundle
 
         if ($lang !== false){
             list(,$path) = \Yii::$app->assetManager->publish(__DIR__."/assets");
-            $view->registerJsFile($path.'/js/i18n/elfinder.' . $lang . '.js', [Assets::className()]);
+			$view->registerJsFile($path.'/js/i18n/elfinder.' . $lang . '.js', ['depends' => [Assets::className()]]);
         }
     }
 }
