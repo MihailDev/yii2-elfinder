@@ -1614,9 +1614,7 @@ embed.elfinder-quicklook-preview-audio {
 .elfinder-rtl .elfinder-button-search .ui-icon-search { right:0;}
 .elfinder-ltr .elfinder-button-search .ui-icon-close { right:0;}
 .elfinder-rtl .elfinder-button-search .ui-icon-close { left:0;}
-
-
-
-
-
-
+.elfinder *{
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
