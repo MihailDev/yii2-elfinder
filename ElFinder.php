@@ -71,9 +71,13 @@ class ElFinder extends BaseWidjet{
             'es', 'no', 'vi', 'fr', 'pl', 'zh_CN', 'hr', 'pt_BR', 'zh_TW', 'hu', 'ro', 'it', 'ru', 'en');
 
         if(!in_array($language, $supportedLanguages)){
-            if (strpos($language, '_')) {
-                $language = substr($language, 0, strpos($language, '_'));
-                if (!in_array($language, $supportedLanguages)) $language = false;
+            if (strpos($language, '-')){
+				$language = str_replace('-', '_', $language);
+				if(!in_array($language, $supportedLanguages)) {
+					$language = substr($language, 0, strpos($language, '_'));
+					if (!in_array($language, $supportedLanguages))
+						$language = false;
+				}
             } else {
                 $language = false;
             }
