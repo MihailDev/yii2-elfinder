@@ -30,7 +30,7 @@ class Assets extends AssetBundle
     public static function addLangFile($lang, $view){
         $lang = ElFinder::getSupportedLanguage($lang);
 
-        if ($lang !== false){
+        if ($lang !== false && $lang !== 'en'){
             list(,$path) = \Yii::$app->assetManager->publish(__DIR__."/assets");
 			$view->registerJsFile($path.'/js/i18n/elfinder.' . $lang . '.js', ['depends' => [Assets::className()]]);
         }
