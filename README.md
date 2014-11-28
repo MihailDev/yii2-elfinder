@@ -51,6 +51,15 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
                     'name'   => ['category' => 'my','message' => 'Some Name'], // Yii::t($category, $message)
                     'access' => ['read' => '*', 'write' => 'UserFilesAccess'] // * - для всех, иначе проверка доступа в даааном примере все могут видет а редактировать могут пользователи только с правами UserFilesAccess
                 ]
+            ],
+            'watermark' => [
+            		'source'         => __DIR__.'/logo.png', // Path to Water mark image
+                     'marginRight'    => 5,          // Margin right pixel
+                     'marginBottom'   => 5,          // Margin bottom pixel
+                     'quality'        => 95,         // JPEG image save quality
+                     'transparency'   => 70,         // Water mark image transparency ( other than PNG )
+                     'targetType'     => IMG_GIF|IMG_JPG|IMG_PNG|IMG_WBMP, // Target image formats ( bit-field )
+                     'targetMinPixel' => 200         // Target image minimum pixel size
             ]
         ]
     ],
@@ -64,6 +73,15 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
 			'root' => [
 				'path' => 'files',
 				'name' => 'Files'
+			],
+			'watermark' => [
+						'source'         => __DIR__.'/logo.png', // Path to Water mark image
+						 'marginRight'    => 5,          // Margin right pixel
+						 'marginBottom'   => 5,          // Margin bottom pixel
+						 'quality'        => 95,         // JPEG image save quality
+						 'transparency'   => 70,         // Water mark image transparency ( other than PNG )
+						 'targetType'     => IMG_GIF|IMG_JPG|IMG_PNG|IMG_WBMP, // Target image formats ( bit-field )
+						 'targetMinPixel' => 200         // Target image minimum pixel size
 			]
 		]
     ],
