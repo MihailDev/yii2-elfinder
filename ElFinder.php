@@ -112,8 +112,8 @@ class ElFinder extends BaseWidjet{
         echo Html::tag($container, Html::tag('iframe','', $this->frameOptions), $this->containerOptions);
 
         if(!empty($this->callbackFunction)){
-            AssetsCallBack::register($this->getView());
-            $this->getView()->registerJs("ElFinderFileCallback.register(".Json::encode($this->id).",".Json::encode($this->callbackFunction).");");
+			AssetsCallBack::register($this->getView());
+            $this->getView()->registerJs("mihaildev.elFinder.register(".Json::encode($this->id).",".Json::encode($this->callbackFunction).");");
         }
     }
 

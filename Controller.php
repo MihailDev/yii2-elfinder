@@ -110,7 +110,7 @@ class Controller extends BaseController{
             
             $options['getFileCallback'] = new JsExpression('function(file){ '.
                 'if (window!=window.top) {var parent = window.parent;}else{var parent = window.opener;}'.
-                'if(parent.ElFinderFileCallback.callFunction('.Json::encode($_GET['callback']).', file))'.
+                'if(parent.mihaildev.elFinder.callFunction('.Json::encode($_GET['callback']).', file))'.
                 'window.close(); }');
         }
 

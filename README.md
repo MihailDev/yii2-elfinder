@@ -56,6 +56,19 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
     ],
 ```
 
+```php
+'controllerMap' => [
+        'elfinder' => [
+			'class' => 'mihaildev\elfinder\PathController',
+			'access' => ['@'],
+			'root' => [
+				'path' => 'files',
+				'name' => 'Files'
+			]
+		]
+    ],
+```
+
 ## Использование
 
 ```php
@@ -90,11 +103,55 @@ echo ElFinder::widget([
 
 ```
 
+## Использование при работе с PathController
+```php
+use mihaildev\elfinder\InputFile;
+use mihaildev\elfinder\ElFinder;
+use yii\web\JsExpression;
+
+echo InputFile::widget([
+    'language'   => 'ru',
+    'controller' => 'elfinder', // вставляем название контроллера, по умолчанию равен elfinder
+    'path' => 'image', // будет открыта папка из настроек контроллера с добавлением указанной под деритории  
+    'filter'     => 'image',    // фильтр файлов, можно задать массив фильтров https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#wiki-onlyMimes
+    'name'       => 'myinput',
+    'value'      => '',
+]);
+
+echo $form->field($model, 'attribute')->widget(InputFile::className(), [
+    'language'      => 'ru',
+    'controller'    => 'elfinder', // вставляем название контроллера, по умолчанию равен elfinder
+    'path' => 'image', // будет открыта папка из настроек контроллера с добавлением указанной под деритории 
+    'filter'        => 'image',    // фильтр файлов, можно задать массив фильтров https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#wiki-onlyMimes
+    'template'      => '<div class="input-group">{input}<span class="input-group-btn">{button}</span></div>',
+    'options'       => ['class' => 'form-control'],
+    'buttonOptions' => ['class' => 'btn btn-default'],
+    'multiple'      => false       // возможность выбора нескольких файлов
+]);
+
+echo ElFinder::widget([
+    'language'         => 'ru',
+    'controller'       => 'elfinder', // вставляем название контроллера, по умолчанию равен elfinder
+    'path' => 'image', // будет открыта папка из настроек контроллера с добавлением указанной под деритории 
+    'filter'           => 'image',    // фильтр файлов, можно задать массив фильтров https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#wiki-onlyMimes
+    'callbackFunction' => new JsExpression('function(file, id){}') // id - id виджета
+]);
+
+```
+
 ## CKEditor
 ```php
 use mihaildev\elfinder\ElFinder;
 
 $ckeditorOptions = ElFinder::ckeditorOptions($controller,[/* Some CKEditor Options */]);
+
+```
+
+Для указания подкаталога (при использовании PathController)
+```php
+use mihaildev\elfinder\ElFinder;
+
+$ckeditorOptions = ElFinder::ckeditorOptions([$controller, 'path' => 'some/sub/path'],[/* Some CKEditor Options */]);
 
 ```
 
@@ -109,6 +166,28 @@ $form->field($model, 'attribute')->widget(CKEditor::className(), [
   'editorOptions' => ElFinder::ckeditorOptions('elfinder',[/* Some CKEditor Options */]),
   ...
 ]);
+```
+
+Для указания подкаталога (при использовании PathController)
+
+```php
+use mihaildev\ckeditor\CKEditor;
+use mihaildev\elfinder\ElFinder;
+
+$form->field($model, 'attribute')->widget(CKEditor::className(), [
+  ...
+  'editorOptions' => ElFinder::ckeditorOptions(['elfinder', 'path' => 'some/sub/path'],[/* Some CKEditor Options */]),
+  ...
+]);
+```
+
+## Проблемы
+При встраивание без iframe возможен конфликт с bootstrap.js. Studio-42/elFinder#740
+Решение - добавляем в шаблон запись
+```php
+
+mihaildev\elfinder\Assets::noConflict($this);
+
 ```
 
 ## Полезные ссылки
