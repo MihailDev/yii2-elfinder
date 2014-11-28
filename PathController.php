@@ -32,6 +32,7 @@ class PathController extends Controller{
 		'basePath' => '@webroot/files',
 		'path' => ''
 	];
+	public $watermark;
 
 	public function behaviors()
 	{
@@ -77,6 +78,20 @@ class PathController extends Controller{
 
 		if($root->isAvailable())
 			$this->_options['roots'][] = $root->getRoot();
+
+		if(!empty($this->watermark)){
+			$this->_options['bind']['upload.presave'] = 'Plugin.Watermark.onUpLoadPreSave';
+
+			if(is_string($this->watermark)){
+				$watermark = [
+					'source' => $this->watermark
+				];
+			}else{
+				$watermark = $this->watermark;
+			}
+
+			$this->_options['plugin']['Watermark'] = $watermark;
+		}
 
 		return $this->_options;
 	}
