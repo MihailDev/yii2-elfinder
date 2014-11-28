@@ -32,6 +32,8 @@ class InputFile extends InputWidget{
 
     public $controller = 'elfinder';
 
+	public $path; // work with PathController
+
     public $multiple;
 
     public function init()
@@ -57,6 +59,9 @@ class InputFile extends InputWidget{
 
         if (!empty($this->multiple))
             $managerOptions['multiple'] = $this->multiple;
+
+		if(!empty($this->path))
+			$managerOptions['path'] = $this->path;
 
         $this->_managerOptions['url'] = ElFinder::getManagerUrl($this->controller, $managerOptions);
         $this->_managerOptions['width'] = $this->width;

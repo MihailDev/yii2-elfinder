@@ -25,6 +25,8 @@ class ElFinder extends BaseWidjet{
 
     public $callbackFunction;
 
+	public $path;// work with PathController
+
     public $containerOptions = [];
     public $frameOptions = [];
     public $controller = 'elfinder';
@@ -36,10 +38,20 @@ class ElFinder extends BaseWidjet{
     }
 
     public static function ckeditorOptions($controller, $options = []){
+
+		if(is_array($controller)){
+			$id = $controller[0];
+			unset($controller[0]);
+			$params = $controller;
+		}else{
+			$id = $controller;
+			$params = [];
+		}
+
         return ArrayHelper::merge([
-            'filebrowserBrowseUrl' => self::getManagerUrl($controller),
-            'filebrowserImageBrowseUrl' => self::getManagerUrl($controller, ['filter'=>'image']),
-            'filebrowserFlashBrowseUrl' => self::getManagerUrl($controller, ['filter'=>'flash']),
+            'filebrowserBrowseUrl' => self::getManagerUrl($id, $params),
+            'filebrowserImageBrowseUrl' => self::getManagerUrl($id, ArrayHelper::merge($params, ['filter'=>'image'])),
+            'filebrowserFlashBrowseUrl' => self::getManagerUrl($id, ArrayHelper::merge($params, ['filter'=>'flash'])),
         ], $options);
     }
 
@@ -57,6 +69,9 @@ class ElFinder extends BaseWidjet{
 
 		if(!empty($this->language))
 			$managerOptions['lang'] = $this->language;
+
+		if(!empty($this->path))
+			$managerOptions['path'] = $this->path;
 
         $this->frameOptions['src'] = $this->getManagerUrl($this->controller, $managerOptions);
 
