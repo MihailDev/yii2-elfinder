@@ -70,7 +70,7 @@ class BasePath extends BaseComponent{
             'read' => false,
             'write' => false,
             'hidden' => true,
-            'locked' => true
+            'locked' => false
         ];
 
         return \yii\helpers\ArrayHelper::merge($options, $this->options);
