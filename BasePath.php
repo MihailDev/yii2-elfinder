@@ -10,6 +10,9 @@ use Yii;
 use yii\base\Component as BaseComponent;
 
 
+/**
+ * @property array defaults
+ */
 class BasePath extends BaseComponent{
 
     public $driver = 'LocalFileSystem';
@@ -32,31 +35,31 @@ class BasePath extends BaseComponent{
         return $this->defaults['read'];
     }
 
-    private $_defults;
+    private $_defaults;
 
     public function getDefaults(){
-        if($this->_defults !== null)
-            return $this->_defults;
-        $this->_defults['read'] = false;
-        $this->_defults['write'] = false;
+        if($this->_defaults !== null)
+            return $this->_defaults;
+        $this->_defaults['read'] = false;
+        $this->_defaults['write'] = false;
 
         if(isset($this->access['write'])){
-            $this->_defults['write'] = true;
+            $this->_defaults['write'] = true;
             if($this->access['write'] != '*'){
-                $this->_defults['write'] = Yii::$app->user->can($this->access['write']);
+                $this->_defaults['write'] = Yii::$app->user->can($this->access['write']);
             }
         }
 
-        if($this->_defults['write']){
-            $this->_defults['read'] = true;
+        if($this->_defaults['write']){
+            $this->_defaults['read'] = true;
         }elseif(isset($this->access['read'])){
-            $this->_defults['read'] = true;
+            $this->_defaults['read'] = true;
             if($this->access['read'] != '*'){
-                $this->_defults['read'] = Yii::$app->user->can($this->access['read']);
+                $this->_defaults['read'] = Yii::$app->user->can($this->access['read']);
             }
         }
 
-        return $this->_defults;
+        return $this->_defaults;
     }
 
     public function getRoot(){
