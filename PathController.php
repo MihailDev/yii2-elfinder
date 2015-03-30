@@ -52,9 +52,13 @@ class PathController extends BaseController{
 			$root['class'] = 'mihaildev\elfinder\LocalPath';
 
 		if(!empty($subPath)){
-			$subPath = '/'. trim($subPath, '/');
-			$subPath = str_replace('/..', '', $subPath);
-			$root['path'] = rtrim($root['path'], '/') . $subPath;
+			if(preg_match("/\./i", $subPath)){
+				$root['path'] = rtrim($root['path'], '/');
+			}
+			else{
+				$root['path'] = rtrim($root['path'], '/');
+				$root['path'] .= '/' . trim($subPath, '/');
+			}
 		}
 
 
