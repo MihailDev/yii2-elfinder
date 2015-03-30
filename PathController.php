@@ -36,10 +36,10 @@ class PathController extends BaseController{
 
 	public function getOptions()
 	{
-		$subPath = Yii::$app->request->getQueryParam('path', '');
-
 		if($this->_options !== null)
 			return $this->_options;
+
+		$subPath = Yii::$app->request->getQueryParam('path', '');
 
 		$this->_options['roots'] = [];
 
@@ -52,8 +52,9 @@ class PathController extends BaseController{
 			$root['class'] = 'mihaildev\elfinder\LocalPath';
 
 		if(!empty($subPath)){
-			$root['path'] = rtrim($root['path'], '/');
-			$root['path'] .= '/' . trim($subPath, '/');
+			$subPath = '/'. trim($subPath, '/');
+			$subPath = str_replace('/..', '', $subPath);
+			$root['path'] = rtrim($root['path'], '/') . $subPath;
 		}
 
 
