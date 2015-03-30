@@ -23,6 +23,8 @@ class BasePath extends BaseComponent{
 
     public $access = ['read' => '*', 'write' => '*'];
 
+	public $tmbPath;
+
     public function getAlias(){
         if(is_array($this->name)){
             return Yii::t($this->name['category'], $this->name['message']);
@@ -66,6 +68,14 @@ class BasePath extends BaseComponent{
         $options['driver'] = $this->driver;
         $options['defaults'] = $this->getDefaults();
         $options['alias'] = $this->getAlias();
+
+		$options['tmpPath'] = Yii::getAlias('@runtime/elFinderTmpPath');
+
+		if(!empty($this->tmbPath)) {
+			$options['tmbPath'] = Yii::getAlias('@webroot') . '/' . trim($this->tmbPath, '/');
+			$options['tmbURL'] = Yii::getAlias('@web') . '/' . trim($this->tmbPath, '/');
+		}
+
         $options['mimeDetect'] = 'internal';
         $options['imgLib'] = 'gd';
         $options['attributes'][] = [

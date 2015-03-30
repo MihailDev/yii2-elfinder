@@ -60,8 +60,6 @@ class FtpPath extends BasePath{
 		$options['path'] = $this->getRealPath();
 		$options['URL'] = $this->getUrl();
 
-		//var_export($options); exit;
-
 		return $options;
 	}
 }
