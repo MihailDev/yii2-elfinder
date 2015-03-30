@@ -1,7 +1,7 @@
 /**
  * Dutch translation
  * @author Barry vd. Heuvel <barry@fruitcakestudio.nl>
- * @version 2012-04-02
+ * @version 2014-12-19
  */
 if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object') {
 	elFinder.prototype.i18.nl = {
@@ -50,18 +50,21 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errRename'            : 'Kan "$1" niet hernoemen.',
 			'errCopyFrom'          : 'Bestanden kopiëren van "$1" is niet toegestaan.',
 			'errCopyTo'            : 'Bestanden kopiëren naar "$1" is niet toegestaan.',
-			'errUploadCommon'      : 'Upload fout.',
-			'errUpload'            : 'Kan "$1" niet uploaden.',
+			'errUpload'            : 'Upload fout.',
+			'errUploadFile'        : 'Kan "$1" niet uploaden.',
 			'errUploadNoFiles'     : 'Geen bestanden gevonden om te uploaden.',
-			'errMaxSize'           : 'Data overschrijdt de maximale grootte.',
-			'errFileMaxSize'       : 'Bestand overschrijdt de maximale grootte.',
+			'errUploadTotalSize'   : 'Data overschrijdt de maximale grootte.',
+			'errUploadFileSize'    : 'Bestand overschrijdt de maximale grootte.',
 			'errUploadMime'        : 'Bestandstype niet toegestaan.',
 			'errUploadTransfer'    : '"$1" overdrachtsfout.', 
+			'errNotReplace'        : 'Object "$1" bestaat al op deze locatie en kan niet vervangen worden door een ander type object.',
+			'errReplace'           : 'Kan "$1" niet vervangen.',
 			'errSave'              : 'Kan "$1" niet opslaan.',
 			'errCopy'              : 'Kan "$1" niet kopiëren.',
 			'errMove'              : 'Kan "$1" niet verplaatsen.',
 			'errCopyInItself'      : 'Kan "$1" niet in zichzelf kopiëren.',
 			'errRm'                : 'Kan "$1" niet verwijderen.',
+			'errRmSrc'             : 'Kan bronbestanden niet verwijderen.',
 			'errExtract'           : 'Kan de bestanden van "$1" niet uitpakken.',
 			'errArchive'           : 'Kan het archief niet maken.',
 			'errArcType'           : 'Archief type is niet ondersteund.',
@@ -71,6 +74,10 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errArcSymlinks'       : 'Om veiligheidsredenen kan een bestand met symlinks of bestanden met niet toegestane namen niet worden uitgepakt .',
 			'errArcMaxSize'        : 'Archief overschrijdt de maximale bestandsgrootte.',
 			'errResize'            : 'Kan het formaat van "$1" niet wijzigen.',
+			'errResizeDegree'      : 'Ongeldig aantal graden om te draaien.',
+			'errResizeRotate'      : 'Afbeelding kan niet gedraaid worden.', 
+			'errResizeSize'        : 'Ongeldig afbeelding formaat.', 
+			'errResizeNoChange'    : 'Afbeelding formaat is niet veranderd.', 
 			'errUsupportType'      : 'Bestandstype wordt niet ondersteund.',
 			'errNotUTF8Content'    : 'Bestand "$1" is niet in UTF-8 and kan niet aangepast worden.', 
 			'errNetMount'          : 'Kan "$1" niet mounten.',   
@@ -84,7 +91,8 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errFtpMkdir'          : 'Kan het externe map niet aanmaken op de FTP-server: "$1"',
 			'errArchiveExec'       : 'Er is een fout opgetreden bij het archivering van de bestanden: "$1" ',
 			'errExtractExec'       : 'Er is een fout opgetreden bij het uitpakken van de bestanden: "$1" ',
-			'errUploadFile'        : 'Kan "$1" niet uploaden',
+			'errNetUnMount'        : 'Kan niet unmounten',
+			'errConvUTF8'          : 'Kan niet converteren naar UTF-8',
 			
 			/******************************* commands names ********************************/
 			'cmdarchive'   : 'Maak archief',
@@ -115,6 +123,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdresize'    : 'Formaat wijzigen',
 			'cmdsort'      : 'Sorteren',
 			'cmdnetmount'  : 'Mount netwerk volume',
+			'cmdnetunmount': 'Unmount',
 			
 			/*********************************** buttons ***********************************/ 
 			'btnClose'  : 'Sluit',
@@ -125,6 +134,9 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'btnNo'     : 'Nee',
 			'btnYes'    : 'Ja',
 			'btnMount'  : 'Mount',
+			'btnApprove': 'Ga naar $1 & keur goed',
+			'btnUnmount': 'Unmount',
+			'btnConv'   : 'Converteer',
 			
 			/******************************** notifications ********************************/
 			'ntfopen'     : 'Bezig met openen van map',
@@ -143,26 +155,31 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'ntfarchive'  : 'Archief aan het maken',
 			'ntfextract'  : 'Bestanden uitpakken actief',
 			'ntfsearch'   : 'Zoeken naar bestanden',
+			'ntfresize'   : 'Formaat wijzigen van afbeeldingen',
 			'ntfsmth'     : 'Iets aan het doen',
 			'ntfloadimg'  : 'Laden van plaatje',
-			'ntfnetmount' : 'Verhogen netwerk volume',
+			'ntfnetmount' : 'Mounten van netwerk volume',
+			'ntfnetunmount': 'Unmounten van netwerk volume',
+			'ntfdim'      : 'Opvragen afbeeldingen dimensies',
+			'ntfreaddir'  : 'Map informatie lezen',
+			'ntfurl'      : 'URL van link ophalen',
 			
 			/************************************ dates **********************************/
 			'dateUnknown' : 'onbekend',
 			'Today'       : 'Vandaag',
 			'Yesterday'   : 'Gisteren',
-			'Jan'         : 'Jan',
-			'Feb'         : 'Feb',
-			'Mar'         : 'Mar',
-			'Apr'         : 'Apr',
-			'May'         : 'Mei',
-			'Jun'         : 'Jun',
-			'Jul'         : 'Jul',
-			'Aug'         : 'Aug',
-			'Sep'         : 'Sep',
-			'Oct'         : 'Okt',
-			'Nov'         : 'Nov',
-			'Dec'         : 'Dec',
+			'msJan'       : 'Jan',
+			'msFeb'       : 'Feb',
+			'msMar'       : 'Mar',
+			'msApr'       : 'Apr',
+			'msMay'       : 'Mei',
+			'msJun'       : 'Jun',
+			'msJul'       : 'Jul',
+			'msAug'       : 'Aug',
+			'msSep'       : 'Sep',
+			'msOct'       : 'Okt',
+			'msNov'       : 'Nov',
+			'msDec'       : 'Dec',
 			'January'     : 'Januari',
 			'February'    : 'Februari',
 			'March'       : 'Maart',
@@ -201,6 +218,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'confirmReq'      : 'Bevestiging nodig',
 			'confirmRm'       : 'Weet u zeker dat u deze bestanden wil verwijderen?<br/>Deze actie kan niet ongedaan gemaakt worden!',
 			'confirmRepl'     : 'Oud bestand vervangen door het nieuwe bestand?',
+			'confirmConvUTF8' : 'Niet in UTF-8<br/>Converteren naar UTF-8?<br/>De inhoud wordt UTF-8 door op te slaan na de conversie.',
 			'apllyAll'        : 'Toepassen op alles',
 			'name'            : 'Naam',
 			'size'            : 'Grootte',
@@ -258,13 +276,10 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'moveFiles'       : 'Verplaats bestanden',
 			'copyFiles'       : 'Kopieer bestanden',
 			'rmFromPlaces'    : 'Verwijder uit Plaatsen',
-			'untitled folder' : 'Nieuwe map',
-			'untitled file.txt' : 'nieuw bestand.txt',
 			'aspectRatio'     : 'Aspect ratio',
 			'scale'           : 'Schaal',
 			'width'           : 'Breedte',
 			'height'          : 'Hoogte',
-			'mode'		  : 'Modus',
 			'resize'	  : 'Verkleinen', //Or: Vergroten/verkleinen
 			'crop'		  : 'Bijsnijden',
 			'rotate'	  : 'Draaien',
@@ -276,7 +291,12 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'host'            : 'Host', 
 			'port'            : 'Poort',
 			'user'            : 'Gebruikersnaams', 
-			'pass'            : 'Wachtwoord', 
+			'pass'            : 'Wachtwoord',
+			'confirmUnmount'  : 'Weet u zeker dat u $1 wil unmounten?',
+			'dropFilesBrowser': 'Sleep of plak bestanden vanuit de browser',
+			'dropPasteFiles'  : 'Sleep of plak bestanden hier',
+			'encoding'        : 'Encodering',
+			'locale'          : 'Locale',
 			
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : 'Onbekend',
@@ -298,6 +318,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'kindTAR'         : 'TAR archief',
 			'kindGZIP'        : 'GZIP archief',
 			'kindBZIP'        : 'BZIP archief',
+			'kindXZ'          : 'XZ archief',
 			'kindZIP'         : 'ZIP archief',
 			'kindRAR'         : 'RAR archief',
 			'kindJAR'         : 'Java JAR bestand',
@@ -356,6 +377,6 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'kindVideoMKV'    : 'Matroska video',
 			'kindVideoOGG'    : 'Ogg video'
 		}
-	}
+	};
 }
 

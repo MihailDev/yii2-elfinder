@@ -21,6 +21,10 @@ namespace mihaildev\elfinder;
 class FtpPath extends BasePath{
 	public $driver = 'FTP';
 
+	public $baseUrl = '';
+
+	public $basePath = '';
+
 	public $host = 'localhost';
 	public $port = 21;
 
@@ -30,16 +34,33 @@ class FtpPath extends BasePath{
 	public $path = '/';
 	public $mode = 'passive';
 
+	public $iss = false;
+
+	public function getUrl(){
+		return rtrim($this->baseUrl,'/').'/'.trim($this->path,'/');
+	}
+
+	public function getRealPath(){
+		$path = rtrim($this->basePath,'/').'/'.trim($this->path,'/');
+
+		return $path;
+	}
 
 	public function getRoot(){
+		if($this->iss)
+			$this->driver = 'FTPIIS';
+
 		$options = parent::getRoot();
 
 		$options['host'] = $this->host;
 		$options['port'] = $this->port;
 		$options['user'] = $this->user;
 		$options['pass'] = $this->pass;
-		$options['path'] = $this->path;
 		$options['mode'] = $this->mode;
+		$options['path'] = $this->getRealPath();
+		$options['URL'] = $this->getUrl();
+
+		//var_export($options); exit;
 
 		return $options;
 	}

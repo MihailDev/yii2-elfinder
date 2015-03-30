@@ -57,18 +57,21 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errRename'            : 'Unable to rename "$1".',
 			'errCopyFrom'          : 'Copying files from volume "$1" not allowed.',
 			'errCopyTo'            : 'Copying files to volume "$1" not allowed.',
-			'errUploadCommon'      : 'Upload error.',
-			'errUpload'            : 'Unable to upload "$1".',
-			'errUploadNoFiles'     : 'No files found for upload.',
-			'errMaxSize'           : 'Data exceeds the maximum allowed size.',
-			'errFileMaxSize'       : 'File exceeds maximum allowed size.',
-			'errUploadMime'        : 'File type not allowed.',
+			'errUpload'            : 'Upload error.',
+			'errUploadFile'        : 'Unable to upload "$1".',
+			'errUploadNoFiles'     : 'No files found for upload.', 
+			'errUploadTotalSize'   : 'Data exceeds the maximum allowed size.',
+			'errUploadFileSize'    : 'File exceeds maximum allowed size.',
+			'errUploadMime'        : 'File type not allowed.', 
 			'errUploadTransfer'    : '"$1" transfer error.', 
+			'errNotReplace'        : 'Object "$1" already exists at this location and can not be replaced by object with another type.', // new
+			'errReplace'           : 'Unable to replace "$1".',
 			'errSave'              : 'Unable to save "$1".',
 			'errCopy'              : 'Unable to copy "$1".',
 			'errMove'              : 'Unable to move "$1".',
 			'errCopyInItself'      : 'Unable to copy "$1" into itself.',
 			'errRm'                : 'Unable to remove "$1".',
+			'errRmSrc'             : 'Unable remove source file(s).',
 			'errExtract'           : 'Unable to extract files from "$1".',
 			'errArchive'           : 'Unable to create archive.',
 			'errArcType'           : 'Unsupported archive type.',
@@ -78,12 +81,26 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errArcSymlinks'       : 'For security reason denied to unpack archives contains symlinks or files with not allowed names.', // edited 24.06.2012
 			'errArcMaxSize'        : 'Archive files exceeds maximum allowed size.',
 			'errResize'            : 'Unable to resize "$1".',
+			'errResizeDegree'      : 'Invalid rotate degree.',
+			'errResizeRotate'      : 'Image dose not rotated.',
+			'errResizeSize'        : 'Invalid image size.',
+			'errResizeNoChange'    : 'Image size not changed.',
 			'errUsupportType'      : 'Unsupported file type.',
-			'errNotUTF8Content'    : 'File "$1" is not in UTF-8 and cannot be edited.',  // added 9.11.2011
-			'errNetMount'          : 'Unable to mount "$1".',     // added 17.04.2012
-			'errNetMountNoDriver'  : 'Unsupported protocol.',     // added 17.04.2012
-			'errNetMountFailed'    : 'Mount failed.',             // added 17.04.2012
-			'errNetMountHostReq'   : 'Host required.', // added 18.04.2012
+			'errNotUTF8Content'    : 'File "$1" is not in UTF-8 and cannot be edited.',
+			'errNetMount'          : 'Unable to mount "$1".',
+			'errNetMountNoDriver'  : 'Unsupported protocol.',
+			'errNetMountFailed'    : 'Mount failed.',
+			'errNetMountHostReq'   : 'Host required.',
+			'errSessionExpires'    : 'Your session has expired due to inactivity.',
+			'errCreatingTempDir'   : 'Unable to create temporary directory: "$1"',
+			'errFtpDownloadFile'   : 'Unable to download file from FTP: "$1"',
+			'errFtpUploadFile'     : 'Unable to upload file to FTP: "$1"',
+			'errFtpMkdir'          : 'Unable to create remote directory on FTP: "$1"',
+			'errArchiveExec'       : 'Error while archiving files: "$1"',
+			'errExtractExec'       : 'Error while extracting files: "$1"',
+			'errNetUnMount'        : 'Unable to unmount', // from v2.1 added 30.04.2012
+			'errConvUTF8'          : 'Not convertible to UTF-8', // from v2.1 added 08.04.2014
+
 			/******************************* commands names ********************************/
 			'cmdarchive'   : 'Create archive',
 			'cmdback'      : 'Back',
@@ -110,8 +127,11 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdup'        : 'Go to parent directory',
 			'cmdupload'    : 'Upload files',
 			'cmdview'      : 'View',
-			'cmdresize'    : 'Resize image',
+			'cmdresize'    : 'Resize & Rotate',
 			'cmdsort'      : 'Sort',
+			'cmdnetmount'  : 'Mount network volume', // added 18.04.2012
+			'cmdnetunmount': 'Unmount', // from v2.1 added 30.04.2012
+			'cmdplaces'    : 'To Places', // added 28.12.2014
 			
 			/*********************************** buttons ***********************************/ 
 			'btnClose'  : 'Close',
@@ -121,6 +141,10 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'btnCancel' : 'Cancel',
 			'btnNo'     : 'No',
 			'btnYes'    : 'Yes',
+			'btnMount'  : 'Mount',
+			'btnApprove': 'Goto $1 & approve', // from v2.1 added 26.04.2012
+			'btnUnmount': 'Unmount', // from v2.1 added 30.04.2012
+			'btnConv'   : 'Convert', // from v2.1 added 08.04.2014
 			
 			/******************************** notifications ********************************/
 			'ntfopen'     : 'Open folder',
@@ -139,26 +163,31 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'ntfarchive'  : 'Creating archive',
 			'ntfextract'  : 'Extracting files from archive',
 			'ntfsearch'   : 'Searching files',
-			'ntfsmth'     : 'Doing something >_<',
+			'ntfresize'   : 'Resizing images',
+			'ntfsmth'     : 'Doing something',
 			'ntfloadimg'  : 'Loading image',
-			'ntfnetmount' : 'Mounting network volume', // added 18.04.2012
+			'ntfnetmount' : 'Mounting network volume',
+			'ntfnetunmount': 'Unmounting network volume', // from v2.1 added 30.04.2012
+			'ntfdim'      : 'Acquiring image dimension',
+			'ntfreaddir'  : 'Reading folder infomation', // from v2.1 added 01.07.2013
+			'ntfurl'      : 'Getting URL of link', // from v2.1 added 11.03.2014
 			
 			/************************************ dates **********************************/
 			'dateUnknown' : 'unknown',
 			'Today'       : 'Today',
 			'Yesterday'   : 'Yesterday',
-			'Jan'         : 'Jan',
-			'Feb'         : 'Feb',
-			'Mar'         : 'Mar',
-			'Apr'         : 'Apr',
-			'May'         : 'May',
-			'Jun'         : 'Jun',
-			'Jul'         : 'Jul',
-			'Aug'         : 'Aug',
-			'Sep'         : 'Sep',
-			'Oct'         : 'Oct',
-			'Nov'         : 'Nov',
-			'Dec'         : 'Dec',
+			'msJan'       : 'Jan',
+			'msFeb'       : 'Feb',
+			'msMar'       : 'Mar',
+			'msApr'       : 'Apr',
+			'msMay'       : 'May',
+			'msJun'       : 'Jun',
+			'msJul'       : 'Jul',
+			'msAug'       : 'Aug',
+			'msSep'       : 'Sep',
+			'msOct'       : 'Oct',
+			'msNov'       : 'Nov',
+			'msDec'       : 'Dec',
 			'January'     : 'January',
 			'February'    : 'February',
 			'March'       : 'March',
@@ -171,12 +200,12 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'October'     : 'October',
 			'November'    : 'November',
 			'December'    : 'December',
-			'Sunday'      : 'Sunday', 
-			'Monday'      : 'Monday', 
-			'Tuesday'     : 'Tuesday', 
-			'Wednesday'   : 'Wednesday', 
-			'Thursday'    : 'Thursday', 
-			'Friday'      : 'Friday', 
+			'Sunday'      : 'Sunday',
+			'Monday'      : 'Monday',
+			'Tuesday'     : 'Tuesday',
+			'Wednesday'   : 'Wednesday',
+			'Thursday'    : 'Thursday',
+			'Friday'      : 'Friday',
 			'Saturday'    : 'Saturday',
 			'Sun'         : 'Sun', 
 			'Mon'         : 'Mon', 
@@ -185,17 +214,19 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'Thu'         : 'Thu', 
 			'Fri'         : 'Fri', 
 			'Sat'         : 'Sat',
+
 			/******************************** sort variants ********************************/
 			'sortname'          : 'by name', 
 			'sortkind'          : 'by kind', 
 			'sortsize'          : 'by size',
 			'sortdate'          : 'by date',
-			'sortFoldersFirst'  : 'Folders first', // added 22.06.2012
-			
+			'sortFoldersFirst'  : 'Folders first',
+
 			/********************************** messages **********************************/
 			'confirmReq'      : 'Confirmation required',
 			'confirmRm'       : 'Are you sure you want to remove files?<br/>This cannot be undone!',
 			'confirmRepl'     : 'Replace old file with new one?',
+			'confirmConvUTF8' : 'Not in UTF-8<br/>Convert to UTF-8?<br/>Contents become UTF-8 by saving after conversion.', // from v2.1 added 08.04.2014
 			'apllyAll'        : 'Apply to all',
 			'name'            : 'Name',
 			'size'            : 'Size',
@@ -253,25 +284,28 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'moveFiles'       : 'Move files',
 			'copyFiles'       : 'Copy files',
 			'rmFromPlaces'    : 'Remove from places',
-			'untitled folder' : 'untitled folder',
-			'untitled file.txt' : 'untitled file.txt',
 			'aspectRatio'     : 'Aspect ratio',
 			'scale'           : 'Scale',
 			'width'           : 'Width',
 			'height'          : 'Height',
-			'mode'            : 'Mode',
 			'resize'          : 'Resize',
 			'crop'            : 'Crop',
 			'rotate'          : 'Rotate',
 			'rotate-cw'       : 'Rotate 90 degrees CW',
 			'rotate-ccw'      : 'Rotate 90 degrees CCW',
-			'degree'          : 'Degree',
-			'netMountDialogTitle' : 'Mount network volume', // added 18.04.2012
-			'protocol'            : 'Protocol', // added 18.04.2012
-			'host'                : 'Host', // added 18.04.2012
-			'port'                : 'Port', // added 18.04.2012
-			'user'                : 'User', // added 18.04.2012
-			'pass'                : 'Password', // added 18.04.2012
+			'degree'          : '°',
+			'netMountDialogTitle' : 'Mount network volume',
+			'protocol'            : 'Protocol',
+			'host'                : 'Host',
+			'port'                : 'Port',
+			'user'                : 'User',
+			'pass'                : 'Password',
+			'confirmUnmount'      : 'Are you unmount $1?',  // from v2.1 added 30.04.2012
+			'dropFilesBrowser': 'Drop or Paste files from browser', // from v2.1 added 30.05.2012
+			'dropPasteFiles'  : 'Drop or Paste files here', // from v2.1 added 07.04.2014
+			'encoding'        : 'Encoding', // from v2.1 added 19.12.2014
+			'locale'          : 'Locale',   // from v2.1 added 19.12.2014
+
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : 'Unknown',
 			'kindFolder'      : 'Folder',
@@ -292,6 +326,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'kindTAR'         : 'TAR archive',
 			'kindGZIP'        : 'GZIP archive',
 			'kindBZIP'        : 'BZIP archive',
+			'kindXZ'          : 'XZ archive',
 			'kindZIP'         : 'ZIP archive',
 			'kindRAR'         : 'RAR archive',
 			'kindJAR'         : 'Java JAR file',
@@ -350,6 +385,6 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'kindVideoMKV'    : 'Matroska movie',
 			'kindVideoOGG'    : 'Ogg movie'
 		}
-	}
+	};
 }
 

@@ -21,6 +21,7 @@ class LocalPath extends BasePath{
 
     public function getRealPath(){
         $path = Yii::getAlias($this->basePath.'/'.trim($this->path,'/'));
+
         if(!is_dir($path))
             mkdir($path, 0777, true);
 

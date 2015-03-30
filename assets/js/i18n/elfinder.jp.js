@@ -2,7 +2,7 @@
  * Japanese translation
  * @author Tomoaki Yoshida <info@yoshida-studio.jp>
  * @author Naoki Sawada <hypweb@gmail.com>
- * @version 2013-07-03
+ * @version 2014-12-19
  */
 if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object') {
 	elFinder.prototype.i18.jp = {
@@ -25,8 +25,8 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errAbort'             : '接続が中断されました',
 			'errTimeout'           : '接続がタイムアウトしました.',
 			'errNotFound'          : 'バックエンドが見つかりません',
-			'errResponse'          : '無効なバックエンドコンフィグレーションです',
-			'errConf'              : '無効なバックエンドコンフィグレーションです',
+			'errResponse'          : '無効なバックエンドレスポンスです',
+			'errConf'              : 'バックエンドの設定が有効ではありません',
 			'errJSON'              : 'PHP JSON モジュールがインストールされていません',
 			'errNoVolumes'         : '読み込み可能なボリュームが入手できません',
 			'errCmdParams'         : 'コマンド "$1"のパラメーターが無効です',
@@ -92,6 +92,8 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errFtpMkdir'          : 'FTP にリモートディレクトリを作成できません："$1"',
 			'errArchiveExec'       : 'ファイルのアーカイブ中にエラーが発生しました："$1"',
 			'errExtractExec'       : 'ファイルの抽出中にエラーが発生しました："$1"',
+			'errNetUnMount'        : 'アンマウントできません', // added 30.04.2012
+			'errConvUTF8'          : 'UTF-8 に変換できませんでした', // added 08.04.2014
 			
 			/******************************* commands names ********************************/
 			'cmdarchive'   : 'アーカイブ作成',
@@ -122,6 +124,8 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdresize'    : 'リサイズと回転',
 			'cmdsort'      : 'ソート',
 			'cmdnetmount'  : 'ネットワークボリュームをマウント', // added 18.04.2012
+			'cmdnetunmount': 'アンマウント', // added 30.04.2012
+			'cmdplaces'    : 'お気に入りへ', // added 28.12.2014
 			
 			/*********************************** buttons ***********************************/ 
 			'btnClose'  : '閉じる',
@@ -132,6 +136,10 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'btnNo'     : 'いいえ',
 			'btnYes'    : 'はい',
 			'btnMount'  : 'マウント',  // added 18.04.2012
+			'btnApprove': '$1へ行き認可する', // added 26.04.2012
+			'btnUnmount': 'アンマウント', // added 30.04.2012
+			'btnConv'   : '変換', // added 08.04.2014
+			
 			/******************************** notifications ********************************/
 			'ntfopen'     : 'フォルダーを開いています',
 			'ntffile'     : 'ファイルを開いています',
@@ -153,25 +161,53 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'ntfsmth'     : '処理をしています',
       		'ntfloadimg'  : 'イメージを読み込んでいます',
       		'ntfnetmount' : 'ネットワークボリュームをマウントしています', // added 18.04.2012
+      		'ntfnetunmount': 'ネットワークボリュームをアンマウントしています', // added 30.04.2012
 			'ntfdim'      : '画像サイズを取得しています', // added 20.05.2013
 			'ntfreaddir'  : 'ホルダ情報を読み取っています', // added 01.07.2013
+			'ntfurl'      : 'リンクURLを取得しています', // added 11.03.2014
 			
 			/************************************ dates **********************************/
 			'dateUnknown' : '不明',
 			'Today'       : '今日',
 			'Yesterday'   : '昨日',
-			'Jan'         : '1月',
-			'Feb'         : '2月',
-			'Mar'         : '3月',
-			'Apr'         : '4月',
+			'msJan'       : '1月',
+			'msFeb'       : '2月',
+			'msMar'       : '3月',
+			'msApr'       : '4月',
+			'msMay'       : '5月',
+			'msJun'       : '6月',
+			'msJul'       : '7月',
+			'msAug'       : '8月',
+			'msSep'       : '9月',
+			'msOct'       : '10月',
+			'msNov'       : '11月',
+			'msDec'       : '12月',
+			'January'     : '1月',
+			'February'    : '2月',
+			'March'       : '3月',
+			'April'       : '4月',
 			'May'         : '5月',
-			'Jun'         : '6月',
-			'Jul'         : '7月',
-			'Aug'         : '8月',
-			'Sep'         : '9月',
-			'Oct'         : '10月',
-			'Nov'         : '11月',
-			'Dec'         : '12月',
+			'June'        : '6月',
+			'July'        : '7月',
+			'August'      : '8月',
+			'September'   : '9月',
+			'October'     : '10月',
+			'November'    : '11月',
+			'December'    : '12月',
+			'Sunday'      : '日曜日',
+			'Monday'      : '月曜日',
+			'Tuesday'     : '火曜日',
+			'Wednesday'   : '水曜日',
+			'Thursday'    : '木曜日',
+			'Friday'      : '金曜日',
+			'Saturday'    : '土曜日',
+			'Sun'         : '(日)', 
+			'Mon'         : '(月)', 
+			'Tue'         : '(火)', 
+			'Wed'         : '(水)', 
+			'Thu'         : '(木)', 
+			'Fri'         : '(金)', 
+			'Sat'         : '(土)',
 
 			/******************************** sort variants ********************************/
 			'sortname'          : '名前順', 
@@ -184,6 +220,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'confirmReq'      : '処理を実行しますか？',
 			'confirmRm'       : '本当にファイルを削除しますか?<br/>この操作は取り消せません！',
 			'confirmRepl'     : '古いファイルを新しいファイルで上書きしますか？',
+			'confirmConvUTF8' : 'UTF-8 以外の文字が含まれています。<br/>UTF-8  に変換しますか？<br/>変換後の保存でコンテンツは UTF-8 になります。', // added 08.04.2014
 			'apllyAll'        : '全てに適用します',
 			'name'            : '名前',
 			'size'            : 'サイズ',
@@ -201,7 +238,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'selectlfile'     : '最後のファイルを選択',
 			'viewlist'        : 'リスト形式で見る',
 			'viewicons'       : 'アイコン形式で見る',
-			'places'          : 'Places',
+			'places'          : 'お気に入り',
 			'calc'            : '計算', 
 			'path'            : 'パス',
 			'aliasfor'        : 'エイリアス',
@@ -233,10 +270,9 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'maintainer'      : 'メインテナー',
 			'translator'      : '翻訳者',
 			'icons'           : 'アイコン',
-			'dontforget'      : 'タオル忘れちゃだめよー。',
+			'dontforget'      : 'タオル忘れちゃだめよ～',
 			'shortcutsof'     : 'ショートカットは利用できません',
 			'dropFiles'       : 'ここにファイルをドロップ',
-			'dropFilesBrowser': 'ブラウザからファイルをドロップまたは貼り付け', // added 30.05.2012
 			'or'              : 'または',
 			'selectForUpload' : 'アップロードするファイルを選択',
 			'moveFiles'       : 'ファイルを移動',
@@ -258,6 +294,11 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'port'                : 'ポート', // added 18.04.2012
 			'user'                : 'ユーザー名', // added 18.04.2012
 			'pass'                : 'パスワード', // added 18.04.2012
+			'confirmUnmount'      : '$1をアンマウントしますか?',  // added 30.04.2012
+			'dropFilesBrowser': 'ブラウザからファイルをドロップまたは貼り付け', // added 30.05.2012
+			'dropPasteFiles'  : 'ここにファイルをドロップまたは貼り付け', // added 07.04.2014
+			'encoding'        : '文字コード', // from v2.1 added 19.12.2014
+			'locale'          : 'ロケール',   // from v2.1 added 19.12.2014
 
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : '不明',
@@ -279,6 +320,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'kindTAR'         : 'TAR アーカイブ',
 			'kindGZIP'        : 'GZIP アーカイブ',
 			'kindBZIP'        : 'BZIP アーカイブ',
+			'kindXZ'          : 'XZ アーカイブ',
 			'kindZIP'         : 'ZIP アーカイブ',
 			'kindRAR'         : 'RAR アーカイブ',
 			'kindJAR'         : 'Java JAR ファイル',
