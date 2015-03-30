@@ -23,7 +23,7 @@ class BasePath extends BaseComponent{
 
     public $access = ['read' => '*', 'write' => '*'];
 
-	public $tmbPath;
+	public $tmbPath = '.tmb';
 
     public function getAlias(){
         if(is_array($this->name)){
@@ -70,14 +70,10 @@ class BasePath extends BaseComponent{
         $options['alias'] = $this->getAlias();
 
 		$options['tmpPath'] = Yii::getAlias('@runtime/elFinderTmpPath');
-
-		if(!empty($this->tmbPath)) {
-			$options['tmbPath'] = Yii::getAlias('@webroot') . '/' . trim($this->tmbPath, '/');
-			$options['tmbURL'] = Yii::getAlias('@web') . '/' . trim($this->tmbPath, '/');
-		}
+		$options['tmbPath'] = $this->tmbPath;
 
         $options['mimeDetect'] = 'internal';
-        $options['imgLib'] = 'gd';
+        $options['imgLib'] = 'auto';
         $options['attributes'][] = [
             'pattern' => '#.*(\.tmb|\.quarantine)$#i',
             'read' => false,
@@ -85,6 +81,8 @@ class BasePath extends BaseComponent{
             'hidden' => true,
             'locked' => false
         ];
+
+		//var_export($options);exit;
 
         return \yii\helpers\ArrayHelper::merge($options, $this->options);
     }

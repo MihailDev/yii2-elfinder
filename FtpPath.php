@@ -41,9 +41,7 @@ class FtpPath extends BasePath{
 	}
 
 	public function getRealPath(){
-		$path = rtrim($this->basePath,'/').'/'.trim($this->path,'/');
-
-		return $path;
+		return rtrim($this->basePath,'/').'/'.trim($this->path,'/');
 	}
 
 	public function getRoot(){
