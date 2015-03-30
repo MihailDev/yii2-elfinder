@@ -11,6 +11,11 @@ use yii\helpers\Json;
 Assets::register($this);
 Assets::addLangFile($options['lang'], $this);
 
+if(!empty($options['noConflict']))
+	Assets::noConflict($this);
+
+unset($options['noConflict']);
+
 
 $this->registerJs("
 function ElFinderGetCommands(disabled){
