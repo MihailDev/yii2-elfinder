@@ -570,13 +570,14 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 	 * Create new file and write into it from file pointer.
 	 * Return new file path or false on error.
 	 *
-	 * @param  resource  $fp   file pointer
-	 * @param  string    $dir  target dir path
-	 * @param  string    $name file name
+	 * @param  resource $fp file pointer
+	 * @param  string $dir target dir path
+	 * @param  string $name file name
+	 * @param  $stat
 	 * @return bool|string
 	 * @author Dmitry (dio) Levashov
-	 **/
-	protected function _save($fp, $dir, $name, $mime, $stat) {
+	 */
+	protected function _save($fp, $dir, $name, $stat) {
 		return false;
 	}
 	
