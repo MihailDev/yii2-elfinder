@@ -26,10 +26,23 @@ _filePutContents
 require_once "aws.phar";
 
 class elFinderVolumeS3 extends elFinderVolumeDriver {
+	protected function pathToKey($path){
+		//return $path;
+		if($path == '.' || $path == './')
+			return '/';
+
+		if(substr($path, 0, 2) == './'){
+			return substr($path, 2);
+		}
+
+		return $path;
+	}
+
 	/**
 	 * @var string
 	 */
 	protected $driverId = 's';
+	/** @var  \Aws\S3\S3Client */
 	protected $s3;
 
 	public function __construct(){
@@ -74,22 +87,36 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 	 * Scan directory
 	 */
 	protected function cacheDir($path) {
-		$rpath = preg_replace('~/$~', '', $path) . "/";
+		$rpath = rtrim($this->pathToKey($path) , '/'). "/";
+
 		$this->dirsCache[$path] = array();
-		$scan = $this->s3->listObjects(array(
-			"Bucket" => $this->bucket,
-			"Prefix" => $rpath,
-			"Delimiter" => "/"
-		));
-		
+		if($rpath == '/'){
+			$scan = $this->s3->listObjects(array(
+				"Bucket" => $this->bucket,
+				"Key" => '/',
+				"Delimiter" => "/"
+			));
+		}else{
+			$scan = $this->s3->listObjects(array(
+				"Bucket" => $this->bucket,
+				"Prefix" => $rpath,
+				"Delimiter" => "/"
+			));
+		}
+
 		if(isset($scan['CommonPrefixes'])){
 			foreach($scan['CommonPrefixes'] as $prefix){
 				if($prefix['Prefix'] == $rpath){
 					continue;
 				}
-				preg_match('~/([^/]+)/$~', $prefix['Prefix'], $m);
+				//preg_match('~/([^/]+)/$~', $prefix['Prefix'], $m);
+				if($rpath !== '/')
+					$name = substr($prefix['Prefix'], strlen($rpath));
+				else
+					$name = $prefix['Prefix'];
+				$name = trim($name, '/');
 				$data = array(
-					"name" => $m[1],
+					"name" => $name,
 					"size" => 0,
 					"mime" => "directory",
 					"read" => true,
@@ -127,7 +154,7 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 		$path = $this->_joinPath($path, $name);
 		return $this->s3->putObject(array(
 			"Bucket" => $this->bucket,
-			"Key" => $path,
+			"Key" => $this->pathToKey($path),
 			"ContentType" => $mime,
 			"ACL" => $this->options['acl']
 		));
@@ -137,13 +164,14 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 		try{
 			$fileData = $this->s3->$method(array(
 				"Bucket" => $this->bucket,
-				"Key" => $path
+				"Key" => $this->pathToKey($path)
 			));
 		}catch(Aws\S3\Exception\NoSuchKeyException $e){
 			return false;
 		}
 		$fileData['filename'] = $this->_basename($path);
 		$fileData['path'] = $path;
+
 		return $fileData;
 	}
 
@@ -151,7 +179,7 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 	 * Join dir name and file name
 	 */
 	protected function _joinPath($path, $name) {
-		$path = preg_replace('~/$~', '', $path);
+		$path = rtrim($path, '/');
 		return $path.$this->separator.$name;
 	}
 
@@ -176,7 +204,7 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 	 **/
 	protected function _stat($path) {
 		$file = $this->getFile($path);
-		if(!$file){
+		if(!$file || $path == '.'|| $path == './'){
 			$qpath = $path;
 			if(!preg_match('~/$~', $path)){
 				$qpath .= '/';
@@ -214,6 +242,18 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 		return $this->format_stat($file);
 	}
 
+	protected function getTmpName($path){
+		$exp = pathinfo($path, PATHINFO_EXTENSION);
+		if(empty($exp))
+			$exp = 'tmp';
+
+		return 'tmp_'.$this->id()."_".md5(serialize($this->options['s3']).$path).'.'.$exp;
+	}
+
+	protected function getTmpFilePath($path){
+		return $this->tmbPath.DIRECTORY_SEPARATOR.$this->getTmpName($path);
+	}
+
 	/**
 	 * Open file and return file pointer (read only)
 	 *
@@ -222,11 +262,23 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 	 * @return resource|false
 	 **/
 	protected function _fopen($path, $mode='rb'){
+
 		$file = $this->getFile($path, 'getObject');
 		if(!$file){
 			return false;
 		}
-		return $file['Body']->getStream();
+
+		$tmpPath = $this->getTmpFilePath($path);
+
+		$dir = dirname($tmpPath);
+		if(!is_dir($dir)){
+			mkdir($dir, $this->options['tmbPathMode'], true);
+			chmod($dir, $this->options['tmbPathMode']);
+		}
+
+		file_put_contents($tmpPath, (string) $file['Body']);
+
+		return fopen($tmpPath, $mode);
 	}
 
 	/**
@@ -234,6 +286,11 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 	 **/
 	protected function _fclose($fp, $path='') {
 		@fclose($fp);
+		$tmpPath = $this->getTmpFilePath($path);
+		if(file_exists($tmpPath)){
+			unlink($tmpPath);
+		}
+
 	}
 
 	/**
@@ -247,11 +304,24 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 	 * @return Guzzle\Service\Resource\Model
 	 **/
 	protected function _copy($source, $targetDir, $name) {
+		$stat = $this->stat($source);
+		if($stat['mime'] == 'directory'){
+			$newDir = $this->_mkdir($targetDir, $name);
+
+			$items = $this->_scandir($source);
+
+			foreach($items as $item){
+				$this->_copy($item, $newDir, basename($item));
+			}
+
+			$this->clearcache();
+			return $newDir;
+		}
 		$this->clearcache();
 		return $this->s3->copyObject(array(
 			"Bucket" => $this->bucket,
-			"Key" => $this->_joinPath($targetDir, $name),
-			"CopySource" => $this->bucket . "/" . $source,
+			"Key" => $this->pathToKey($this->_joinPath($targetDir, $name)),
+			"CopySource" => $this->bucket . "/" . $this->pathToKey($source),
 			"ACL" => $this->options['acl']
 		));
 	}
@@ -278,9 +348,16 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 	 * @return Guzzle\Service\Resource\Model
 	 **/
 	protected function _unlink($path) {
+
+		$clear = new \Aws\S3\Model\ClearBucket($this->s3, $this->bucket);
+		$iterator = $this->s3->getIterator('ListObjects', array('Bucket' => $this->bucket, 'Prefix' => $this->pathToKey($path)));
+
+		$clear->setIterator($iterator);
+		$clear->clear();
+
 		return $this->s3->deleteObject(array(
 			"Bucket" => $this->bucket,
-			"Key" => $path
+			"Key" => $this->pathToKey($path)
 		));
 	}
 
@@ -294,9 +371,7 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 		if(!preg_match('~/$~', $path)){
 			$path .= '/';
 		}
-		if(count($this->_scandir($path)) > 0){
-			return false;
-		}
+
 		return $this->_unlink($path);
 	}
 
@@ -311,14 +386,17 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 	 **/
 	protected function _save($fp, $dir, $name, $stat) {
 		$path = $this->_joinPath($dir, $name);
+
+		if(strpos($path, './')){
+			$path = substr($path, 2);
+		}
 		
 		$mime = $stat['mime'];
 		$w = !empty($stat['width'])  ? $stat['width']  : 0;
 		$h = !empty($stat['height']) ? $stat['height'] : 0;
-
 		$this->s3->putObject(array(
 			"Bucket" => $this->bucket,
-			"Key" => $path,
+			"Key" => $this->pathToKey($path),
 			"ContentType" => $mime,
 			"ACL" => $this->options['acl'],
 			"Metadata" => array(
@@ -353,9 +431,10 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 	 **/
 	protected function _filePutContents($path, $content) {
 		$oldSettings = $this->getFile($path);
+
 		$settings = array(
 			"Bucket" => $this->bucket,
-			"Key" => $path,
+			"Key" => $this->pathToKey($path),
 			"ACL" => $this->options['acl'],
 			"Body" => $content
 		);
@@ -364,7 +443,7 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 			$settings['ContentType'] = $oldSettings['ContentType'];
 			$settings['ACP'] = Aws\S3\Model\Acp::fromArray($this->s3->getObjectAcl(array(
 				'Bucket' => $this->bucket,
-				'Key' => $path
+				'Key' => $this->pathToKey($path)
 			))->toArray());
 			unset($settings['ACL']);
 		}
@@ -418,6 +497,9 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 		if (empty($path)) {
 			return '.';
 		}
+
+		$path = str_replace('\\', '/', $path);
+		$patr = ltrim($path, '/');
 
 		if (strpos($path, '/') === 0) {
 			$initial_slashes = true;
@@ -475,7 +557,7 @@ class elFinderVolumeS3 extends elFinderVolumeDriver {
 	 * @author Dmitry (dio) Levashov
 	 **/
 	protected function _abspath($path) {
-		return $path == DIRECTORY_SEPARATOR ? $this->root : $this->root.DIRECTORY_SEPARATOR.$path;
+		return $path == DIRECTORY_SEPARATOR ? $this->root : str_replace('\\', '/', $this->root.DIRECTORY_SEPARATOR.$path);
 	}
 	
 	/**

@@ -8,6 +8,7 @@ namespace mihaildev\elfinder;
 
 use Yii;
 use yii\base\Component as BaseComponent;
+use yii\helpers\FileHelper;
 
 
 /**
@@ -23,7 +24,7 @@ class BasePath extends BaseComponent{
 
     public $access = ['read' => '*', 'write' => '*'];
 
-	public $tmbPath = '.tmb';
+	public $tmbPath;
 
     public function getAlias(){
         if(is_array($this->name)){
@@ -70,7 +71,18 @@ class BasePath extends BaseComponent{
         $options['alias'] = $this->getAlias();
 
 		$options['tmpPath'] = Yii::getAlias('@runtime/elFinderTmpPath');
-		$options['tmbPath'] = $this->tmbPath;
+		if(!empty($this->tmbPath)){
+			$this->tmbPath = trim($this->tmbPath, '/');
+			$options['tmbPath'] = \Yii::getAlias('@webroot/'.$this->tmbPath);
+			$options['tmbURL'] = \Yii::$app->request->hostInfo.\Yii::getAlias('@web/'.$this->tmbPath);
+		}else{
+			$subPath = md5($this->className().'|'.serialize($this->name));
+			$options['tmbPath'] = Yii::$app->assetManager->getPublishedPath(__DIR__).DIRECTORY_SEPARATOR.$subPath;
+			$options['tmbURL'] = \Yii::$app->request->hostInfo.Yii::$app->assetManager->getPublishedUrl(__DIR__).'/'.$subPath;
+		}
+
+		FileHelper::createDirectory($options['tmbPath']);
+
 
         $options['mimeDetect'] = 'internal';
         $options['imgLib'] = 'auto';
