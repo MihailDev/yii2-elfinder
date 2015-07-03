@@ -31,9 +31,37 @@ class ElFinder extends BaseWidjet{
 	public $frameOptions = [];
 	public $controller = 'elfinder';
 
+	/**
+	 * Generate URL hash for start dir
+	 * @param string $path relative start dir, begin with `@x/` to define start root index.
+	 * @param int $volume start volume, default to parse from `$path` or 1. 
+	 * @return string
+	 */
+	public static function genElfHash($path, $volume = null)
+	{
+		// valid patterns: @1, @2/subdir, @1/sub1/sub2 ...
+		if($volume === null){
+			if(preg_match('/^@(\d+)/', $path, $match)){
+				$volume = $match[1];
+				$path = ltrim(substr($path, strlen($match[0])), '/');
+				if(empty($path)){
+					$path = '/';
+				}
+			}else{
+				$volume = 1;
+			}
+		}
+		$hash = rtrim(strtr(base64_encode($path), '+/=', '-_.'), '.');
+		return 'elf_l' . intval($volume) . '_' . $hash;
+	}
+
 	public static function getManagerUrl($controller, $params = [])
 	{
 		$params[0] = '/'.$controller."/manager";
+		if(isset($params['path']) && !isset($params['#'])){
+			$params['#'] = self::genElfHash($params['path']);
+			unset($params['path']);
+		}
 		return Yii::$app->urlManager->createUrl($params);
 	}
 
