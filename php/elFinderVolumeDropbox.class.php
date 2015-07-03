@@ -400,7 +400,7 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 			return $this->setError('PDO connection failed: '.$e->getMessage());
 		}
 		
-		$res = $this->deltaCheck(!empty($_REQUEST['init']));
+		$res = $this->deltaCheck(!empty($_REQUEST['reload']) && strpos($_REQUEST['target'], $this->id) === 0);
 		if ($res !== true) {
 			if (is_string($res)) {
 				return $this->setError($res);
@@ -659,9 +659,10 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 					if (!isset($this->cache[$raw['path']])) {
 						$stat = $this->updateCache($raw['path'], $stat);
 					}
-					if ($stat['mime'] !== 'directory' || $this->mimeAccepted($stat['mime'], $mimes)) {
-						$result[] = $this->stat($raw['path']);
+					if (!empty($stat['hidden']) || ($mimes && $stat['mime'] === 'directory') || !$this->mimeAccepted($stat['mime'], $mimes)) {
+						continue;
 					}
+					$result[] = $this->stat($raw['path']);
 				}
 			}
 		}
@@ -1336,6 +1337,15 @@ class elFinderVolumeDropbox extends elFinderVolumeDriver {
 	protected function _checkArchivers() {
 		// die('Not yet implemented. (_checkArchivers)');
 		return array();
+	}
+
+	/**
+	 * chmod implementation
+	 *
+	 * @return bool
+	 **/
+	protected function _chmod($path, $mode) {
+		return false;
 	}
 
 	/**

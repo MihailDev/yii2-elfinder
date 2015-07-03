@@ -1,6 +1,6 @@
 /*!
  * elFinder - file manager for web
- * Version 2.1 (Nightly: dab3746) (2015-03-28)
+ * Version 2.1 (Nightly: 88e0324) (2015-07-03)
  * http://elfinder.org
  * 
  * Copyright 2009-2015, Studio 42
@@ -184,10 +184,10 @@ div.elfinder-cwd-wrapper-list tr.ui-state-default td {
 }
 div.elfinder-cwd-wrapper-list tr.ui-state-default td span.ui-icon {
 	position: absolute;
-	top: -5px;
+	top: 0.4em;
 	left: 0;
 	right: 0;
-	margin: auto;
+	margin: auto 0px auto auto;
 }
 
 
@@ -502,8 +502,8 @@ div.elfinder-cwd-wrapper-list tr.ui-state-default td span.ui-icon {
 
 /* container active on dropenter */
 .elfinder .elfinder-cwd-wrapper.elfinder-droppable-active {
-	padding:0;
-	border:2px solid #8cafed;
+	outline: 2px solid #8cafed;
+	outline-offset: -2px;
 }
 
 
@@ -673,8 +673,24 @@ div.elfinder-cwd-wrapper-list tr.ui-state-default td span.ui-icon {
 	border: 0 solid;
 	margin: 0 0 10px 0;
 	border-spacing: 0;
+	box-sizing: padding-box;
+	padding: 2px;
 }
 .elfinder .elfinder-cwd table thead tr { border-left:0 solid; border-top:0 solid; border-right:0 solid; }
+
+.elfinder .elfinder-cwd table thead td {
+	padding: 4px 14px;
+}
+.elfinder .elfinder-cwd table thead td.ui-state-active {
+	background: #ebf1f6;
+	background: -moz-linear-gradient(top,  #ebf1f6 0%, #abd3ee 50%, #89c3eb 51%, #d5ebfb 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ebf1f6), color-stop(50%,#abd3ee), color-stop(51%,#89c3eb), color-stop(100%,#d5ebfb));
+	background: -webkit-linear-gradient(top,  #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%);
+	background: -o-linear-gradient(top,  #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%);
+	background: -ms-linear-gradient(top,  #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%);
+	background: linear-gradient(to bottom,  #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebf1f6', endColorstr='#d5ebfb',GradientType=0 );
+}
 
 .elfinder .elfinder-cwd table td { 
 	padding:4px 12px;
@@ -685,6 +701,7 @@ div.elfinder-cwd-wrapper-list tr.ui-state-default td span.ui-icon {
 	border:0 solid;
 	
 }
+
 .elfinder .elfinder-cwd tr.elfinder-touch td {
 	padding: 10px 12px;
 }
@@ -871,6 +888,7 @@ div.elfinder-cwd-wrapper-list tr.ui-state-default td span.ui-icon {
 .elfinder-dialog-icon-loadimg,
 .elfinder-dialog-icon-netmount,
 .elfinder-dialog-icon-netunmount,
+.elfinder-dialog-icon-chmod,
 .elfinder-dialog-icon-dim         { background-position: 0 -434px; }
 
 /*********************** CONFIRM DIALOG **************************/
@@ -1608,6 +1626,7 @@ embed.elfinder-quicklook-preview-audio {
 .elfinder-button-icon-netmount  { background-position: 0 -688px; }
 .elfinder-button-icon-netunmount { background-position: 0 -96px; }
 .elfinder-button-icon-places    { background-position: 0 -704px; }
+.elfinder-button-icon-chmod     { background-position: 0  -48px; }
 
 /* button with dropdown menu*/
 .elfinder .elfinder-menubutton { overflow:visible; }
@@ -1670,6 +1689,23 @@ embed.elfinder-quicklook-preview-audio {
 	min-height: 26px;
 	float:right;
 	width:202px;
+	overflow: visible;
+}
+
+.elfinder .elfinder-button-search .elfinder-button-menu {
+	font-size: 8pt;
+	text-align: center;
+	width: 100%;
+}
+
+.elfinder .elfinder-button-search .elfinder-button-menu div {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 5px;
+}
+
+.elfinder .elfinder-button-search .elfinder-button-menu div .ui-state-hover {
+	border: 1px solid;
 }
 
 /* ltr/rte enviroment */

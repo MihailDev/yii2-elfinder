@@ -70,6 +70,13 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	public $netMountKey = '';
 	
 	/**
+	 * FTP command `MLST` support
+	 * 
+	 * @var unknown
+	 */
+	private $MLSTsupprt = false;
+	
+	/**
 	 * Constructor
 	 * Extend options with required fields
 	 *
@@ -113,6 +120,8 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 				$options['locale'] = $_REQUEST['locale'];
 			}
 		}
+		$options['statOwner'] = true;
+		$options['allowChmodReadOnly'] = true;
 		return $options;
 	}
 	
@@ -243,11 +252,12 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 
 		foreach ($features as $feat) {
 			if (strpos(trim($feat), 'MLST') === 0) {
-				return true;
+				$this->MLSTsupprt = true;
+				break;
 			}
 		}
 		
-		return $this->setError('Server does not support command MLST.');
+		return true;
 	}
 	
 	/*********************************************************************/
@@ -290,7 +300,13 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 			if (empty($stat['ts'])) {
 				$stat['ts'] = strtotime($info[6].' '.$info[5].' '.$info[7]);
 			}
-			$stat['owner'] = $info[2];
+			
+			if ($this->options['statOwner']) {
+				$stat['owner'] = $info[2];
+				$stat['group'] = $info[3];
+				$stat['perm']  = substr($info[0], 1);
+				$stat['isowner'] = $stat['owner']? ($stat['owner'] == $this->options['user']) : $this->options['owner'];
+			}
 			
 			$name = $info[8];
 			
@@ -327,7 +343,6 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 			$stat['size']  = $stat['mime'] == 'directory' ? 0 : $info[4];
 			$stat['read']  = $perm['read'];
 			$stat['write'] = $perm['write'];
-			$stat['perm']  = substr($info[0], 1);
 		} else {
 			die('Windows ftp servers not supported yet');
 		}
@@ -350,7 +365,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 			$parts[] = substr($perm, $i, 1);
 		}
 
-		$read = ($owner && $parts[0] == 'r') || $parts[4] == 'r' || $parts[7] == 'r';
+		$read = ($owner && $parts[1] == 'r') || $parts[4] == 'r' || $parts[7] == 'r';
 		
 		return array(
 			'read'  => $parts[0] == 'd' ? $read && (($owner && $parts[3] == 'x') || $parts[6] == 'x' || $parts[9] == 'x') : $read,
@@ -551,6 +566,24 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	 * @author Dmitry (dio) Levashov
 	 **/
 	protected function _stat($path) {
+		if (isset($this->cache[$path])) {
+			return $this->cache[$path];
+		}
+		if (!$this->MLSTsupprt) {
+			if ($path === $this->root) {
+				return array(
+					'name' => $this->root,
+					'mime' => 'directory',
+					'dirs' => $this->_subdirs($path)
+				);
+			}
+			$this->cacheDir($this->_dirname($path));
+			if (isset($this->cache[$path])) {
+				return $this->cache[$path];
+			} else {
+				return array();
+			}
+		}
 		$raw = ftp_raw($this->connect, 'MLST ' . $path);
 		if (is_array($raw) && count($raw) > 1 && substr(trim($raw[0]), 0, 1) == 2) {
 			$parts = explode(';', trim($raw[1]));
@@ -662,7 +695,8 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	protected function _subdirs($path) {
 		
 		foreach (ftp_rawlist($this->connect, $path) as $str) {
-			if (($stat = $this->parseRaw($str)) && $stat['mime'] == 'directory') {
+			$info = preg_split('/\s+/', $str, 9);
+			if (substr(strtolower($info[0]), 0, 1) === 'd') {
 				return true;
 			}
 		}
@@ -932,6 +966,16 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	protected function _checkArchivers() {
 		// die('Not yet implemented. (_checkArchivers)');
 		return array();
+	}
+
+	/**
+	 * chmod availability
+	 *
+	 * @return bool
+	 **/
+	protected function _chmod($path, $mode) {
+		$modeOct = is_string($mode) ? octdec($mode) : octdec(sprintf("%04o",$mode));
+		return @ftp_chmod($this->connect, $modeOct, $path);
 	}
 
 	/**

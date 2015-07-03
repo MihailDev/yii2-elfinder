@@ -89,15 +89,16 @@ class elFinder {
 		'upload'    => array('target' => true, 'FILES' => true, 'mimes' => false, 'html' => false, 'upload' => false, 'name' => false, 'upload_path' => false, 'chunk' => false, 'cid' => false),
 		'get'       => array('target' => true, 'conv' => false),
 		'put'       => array('target' => true, 'content' => '', 'mimes' => false),
-		'archive'   => array('targets' => true, 'type' => true, 'mimes' => false),
-		'extract'   => array('target' => true, 'mimes' => false),
-		'search'    => array('q' => true, 'mimes' => false),
+		'archive'   => array('targets' => true, 'type' => true, 'mimes' => false, 'name' => false),
+		'extract'   => array('target' => true, 'mimes' => false, 'makedir' => false),
+		'search'    => array('q' => true, 'mimes' => false, 'target' => false),
 		'info'      => array('targets' => true),
 		'dim'       => array('target' => true),
 		'resize'    => array('target' => true, 'width' => true, 'height' => true, 'mode' => false, 'x' => false, 'y' => false, 'degree' => false),
 		'netmount'  => array('protocol' => true, 'host' => true, 'path' => false, 'port' => false, 'user' => true, 'pass' => true, 'alias' => false, 'options' => false),
 		'url'       => array('target' => true, 'options' => false),
-		'callback'  => array('node' => true, 'json' => false, 'bind' => false, 'done' => false)
+		'callback'  => array('node' => true, 'json' => false, 'bind' => false, 'done' => false),
+		'chmod'     => array('targets' => true, 'mode' => true)
 	);
 	
 	/**
@@ -244,7 +245,7 @@ class elFinder {
 		self::$sessionCacheKey = !empty($opts['sessionCacheKey']) ? $opts['sessionCacheKey'] : 'elFinderCaches';
 		
 		// check session cache
-		$_optsMD5 = md5(serialize($opts['roots']));
+		$_optsMD5 = md5(json_encode($opts['roots']));
 		if (! isset($_SESSION[self::$sessionCacheKey]) || $_SESSION[self::$sessionCacheKey]['_optsMD5'] !== $_optsMD5) {
 			$_SESSION[self::$sessionCacheKey] = array(
 				'_optsMD5' => $_optsMD5
@@ -295,8 +296,8 @@ class elFinder {
 		}
 
 		// check for net volumes stored in session
-		foreach ($this->getNetVolumes() as $root) {
-			$opts['roots'][] = $root;
+		foreach ($this->getNetVolumes() as $key => $root) {
+			$opts['roots'][$key] = $root;
 		}
 
 		// "mount" volumes
@@ -316,9 +317,11 @@ class elFinder {
 							$this->default = $this->volumes[$id]; 
 						}
 					} else {
+						$this->removeNetVolume($i);
 						$this->mountErrors[] = 'Driver "'.$class.'" : '.implode(' ', $volume->error());
 					}
 				} catch (Exception $e) {
+					$this->removeNetVolume($i);
 					$this->mountErrors[] = 'Driver "'.$class.'" : '.$e->getMessage();
 				}
 			} else {
@@ -591,6 +594,19 @@ class elFinder {
 	}
 
 	/**
+	 * Remove netmount volume
+	 * 
+	 * @param string $key  netvolume key
+	 */
+	protected function removeNetVolume($key) {
+		$netVolumes = $this->getNetVolumes();
+		if (is_string($key) && isset($netVolumes[$key])) {
+			unset($netVolumes[$key]);
+			$this->saveNetVolumes($netVolumes);
+		}
+	}
+
+	/**
 	 * Get plugin instance & set to $this->plugins
 	 * 
 	 * @param  string $name   Plugin name (dirctory name)
@@ -707,13 +723,7 @@ class elFinder {
 			$rootstat['netkey'] = $key;
 			return array('added' => array($rootstat));
 		} else {
-			if (! $key = @ $volume->netMountKey) {
-				$key = md5($protocol . '-' . join('-', $options));
-			}
-			if (isset($netVolumes[$key])) {
-				unset($netVolumes[$key]);
-				$this->saveNetVolumes($netVolumes);
-			}
+			$this->removeNetVolume($volume);
 			return array('error' => $this->error(self::ERROR_NETMOUNT, $args['host'], implode(' ', $volume->error())));
 		}
 
@@ -758,7 +768,7 @@ class elFinder {
 		$files = array();
 
 		// get folders trees
-		if ($args['tree']) {
+		if ($tree) {
 			foreach ($this->volumes as $id => $v) {
 				$files[] = $v->file($v->root());
 			}
@@ -769,9 +779,12 @@ class elFinder {
 			return array('error' => $this->error(self::ERROR_OPEN, $cwd['name'], $volume->error()));
 		}
 		
-		foreach ($ls as $file) {
-			if (!in_array($file, $files)) {
-				$files[] = $file;
+		if ($ls) {
+			if ($files) {
+				$files = array_merge($files, $ls);
+				$files = array_unique($files, SORT_REGULAR);
+			} else {
+				$files = $ls;
 			}
 		}
 		
@@ -1445,6 +1458,51 @@ class elFinder {
 	}
 	
 	/**
+	 * chmod
+	 *
+	 * @param array  command arguments
+	 * @return array
+	 * @author David Bartle
+	 **/
+	protected function chmod($args) {
+		$targets = $args['targets'];
+		$mode    = intval((string)$args['mode'], 8);
+
+		if (!is_array($targets)) {
+			$targets = array($targets);
+		}
+		
+		$result = array();
+		
+		if (($volume = $this->volume($targets[0])) == false) {
+			$result['error'] = $this->error(self::ERROR_CONF_NO_VOL);
+			return $result;
+		}
+
+		$files = array();
+		$errors = array();
+		foreach($targets as $target) {
+			$file = $volume->chmod($target, $mode);
+			if ($file) {
+				$files = (is_array($file))? $file : array($file);
+			} else {
+				$errors = array_merge($errors, $volume->error());
+			}
+		}
+		
+		if ($files) {
+			$result['changed'] = $files;
+			if ($errors) {
+				$result['warning'] = $this->error($errors);
+			}
+		} else {
+			$result['error'] = $this->error($errors);
+		}
+		
+		return $result;
+	}
+	
+	/**
 	 * Save uploaded files
 	 *
 	 * @param  array
@@ -1455,13 +1513,14 @@ class elFinder {
 		$target = $args['target'];
 		$volume = $this->volume($target);
 		$files  = isset($args['FILES']['upload']) && is_array($args['FILES']['upload']) ? $args['FILES']['upload'] : array();
-		$result = array('added' => array(), 'header' => empty($args['html']) ? false : 'Content-Type: text/html; charset=utf-8');
+		$header = empty($args['html']) ? array() : array('header' => 'Content-Type: text/html; charset=utf-8');
+		$result = array_merge(array('added' => array()), $header);
 		$paths  = $args['upload_path']? $args['upload_path'] : array();
 		$chunk  = $args['chunk']? $args['chunk'] : '';
 		$cid    = $args['cid']? (int)$args['cid'] : '';
 		
 		if (!$volume) {
-			return array('error' => $this->error(self::ERROR_UPLOAD, self::ERROR_TRGDIR_NOT_FOUND, '#'.$target), 'header' => $header);
+			return array_merge(array('error' => $this->error(self::ERROR_UPLOAD, self::ERROR_TRGDIR_NOT_FOUND, '#'.$target)), $header);
 		}
 		
 		// regist Shutdown function
@@ -1552,7 +1611,7 @@ class elFinder {
 				}
 			}
 			if (empty($files)) {
-				return array('error' => $this->error(self::ERROR_UPLOAD, self::ERROR_UPLOAD_NO_FILES), 'header' => $header);
+				return array_merge(array('error' => $this->error(self::ERROR_UPLOAD, self::ERROR_UPLOAD_NO_FILES)), $header);
 			}
 		}
 		
@@ -1740,14 +1799,15 @@ class elFinder {
 		$target = $args['target'];
 		$mimes  = !empty($args['mimes']) && is_array($args['mimes']) ? $args['mimes'] : array();
 		$error  = array(self::ERROR_EXTRACT, '#'.$target);
+		$makedir = isset($args['makedir'])? (bool)$args['makedir'] : null;
 
 		if (($volume = $this->volume($target)) == false
 		|| ($file = $volume->file($target)) == false) {
 			return array('error' => $this->error(self::ERROR_EXTRACT, '#'.$target, self::ERROR_FILE_NOT_FOUND));
 		}  
 
-		return ($file = $volume->extract($target))
-			? array('added' => array($file))
+		return ($file = $volume->extract($target, $makedir))
+			? array('added' => isset($file['read'])? array($file) : $file)
 			: array('error' => $this->error(self::ERROR_EXTRACT, $volume->path($target), $volume->error()));
 	}
 	
@@ -1762,12 +1822,13 @@ class elFinder {
 	protected function archive($args) {
 		$type    = $args['type'];
 		$targets = isset($args['targets']) && is_array($args['targets']) ? $args['targets'] : array();
+		$name    = isset($args['name'])? $args['name'] : '';
 	
 		if (($volume = $this->volume($targets[0])) == false) {
 			return $this->error(self::ERROR_ARCHIVE, self::ERROR_TRGDIR_NOT_FOUND);
 		}
 	
-		return ($file = $volume->archive($targets, $args['type']))
+		return ($file = $volume->archive($targets, $args['type'], $name))
 			? array('added' => array($file))
 			: array('error' => $this->error(self::ERROR_ARCHIVE, $volume->error()));
 	}
@@ -1782,10 +1843,16 @@ class elFinder {
 	protected function search($args) {
 		$q      = trim($args['q']);
 		$mimes  = !empty($args['mimes']) && is_array($args['mimes']) ? $args['mimes'] : array();
+		$target = !empty($args['target'])? $args['target'] : null;
 		$result = array();
 
-		foreach ($this->volumes as $volume) {
-			$result = array_merge($result, $volume->search($q, $mimes));
+		if (!is_null($target)) {
+			$volume = $this->volume($target);
+			$result = $volume->search($q, $mimes, $target);
+		} else {
+			foreach ($this->volumes as $volume) {
+				$result = array_merge($result, $volume->search($q, $mimes));
+			}
 		}
 		
 		return array('files' => $result);
@@ -1937,7 +2004,7 @@ class elFinder {
 		}
 		exit();
 	}
-	
+
 	/***************************************************************************/
 	/*                                   utils                                 */
 	/***************************************************************************/
