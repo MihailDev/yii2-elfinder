@@ -9,32 +9,32 @@ namespace mihaildev\elfinder;
 use Yii;
 
 class LocalPath extends BasePath{
-    public $path;
+	public $path;
 
 	public $baseUrl = '@web';
 
-    public $basePath = '@webroot';
+	public $basePath = '@webroot';
 
-    public function getUrl(){
-        return Yii::getAlias($this->baseUrl.'/'.trim($this->path,'/'));
-    }
+	public function getUrl(){
+		return Yii::getAlias($this->baseUrl.'/'.trim($this->path,'/'));
+	}
 
-    public function getRealPath(){
-        $path = Yii::getAlias($this->basePath.'/'.trim($this->path,'/'));
+	public function getRealPath(){
+		$path = Yii::getAlias($this->basePath.'/'.trim($this->path,'/'));
 
-        if(!is_dir($path))
-            mkdir($path, 0777, true);
+		if(!is_dir($path))
+			mkdir($path, 0777, true);
 
-        return $path;
-    }
+		return $path;
+	}
 
-    public function getRoot(){
+	public function getRoot(){
 
 		$options = parent::getRoot();
 
 		$options['path'] = $this->getRealPath();
 		$options['URL'] = $this->getUrl();
 
-        return $options;
-    }
+		return $options;
+	}
 } 

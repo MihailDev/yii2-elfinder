@@ -102,7 +102,6 @@ class BaseController extends Controller{
 	}
 
 	public function actionManager(){
-
 		return $this->renderFile(__DIR__."/views/manager.php", ['options'=>$this->getManagerOptions()]);
 	}
 } 

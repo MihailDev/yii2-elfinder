@@ -74,13 +74,11 @@ class ButtonWidget extends Widget{
 	}
 
 	public function run(){
-
 		AssetsCallBack::register($this->getView());
 
 		echo Html::tag($this->tag, $this->name, $this->options);
 
 		$this->getView()->registerJs("mihaildev.elFinder.register(" . Json::encode($this->_managerOptions['id']) . ", " . Json::encode($this->callback) . ");"); // register callback Function
 		$this->getView()->registerJs("\$(document).on('click', '#" . $this->options['id'] . "', function(){mihaildev.elFinder.openManager(" . Json::encode($this->_managerOptions) . ");});");//on click button open manager
-
 	}
 }

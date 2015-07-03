@@ -14,83 +14,81 @@ use yii\widgets\InputWidget;
 
 
 class InputFile extends InputWidget{
+	public $language;
 
-    public $language;
+	public $filter;
 
-    public $filter;
+	public $buttonTag = 'button';
+	public $buttonName = 'Browse';
+	public $buttonOptions = [];
 
-    public $buttonTag = 'button';
-    public $buttonName = 'Browse';
-    public $buttonOptions = [];
+	protected $_managerOptions;
 
-    protected $_managerOptions;
+	public $width = 'auto';
+	public $height = 'auto';
 
-    public $width = 'auto';
-    public $height = 'auto';
+	public $template = '{input}{button}';
 
-    public $template = '{input}{button}';
-
-    public $controller = 'elfinder';
+	public $controller = 'elfinder';
 
 	public $path; // work with PathController
 
-    public $multiple;
+	public $multiple;
 
-    public function init()
-    {
-        parent::init();
+	public function init()
+	{
+		parent::init();
 
-        if(empty($this->language))
-            $this->language = ElFinder::getSupportedLanguage(Yii::$app->language);
+		if(empty($this->language))
+			$this->language = ElFinder::getSupportedLanguage(Yii::$app->language);
 
-        if(empty($this->buttonOptions['id']))
-            $this->buttonOptions['id'] = $this->options['id'].'_button';
+		if(empty($this->buttonOptions['id']))
+			$this->buttonOptions['id'] = $this->options['id'].'_button';
 
-        $this->buttonOptions['type'] = 'button';
+		$this->buttonOptions['type'] = 'button';
 
-        $managerOptions = [];
-        if(!empty($this->filter))
-            $managerOptions['filter'] = $this->filter;
+		$managerOptions = [];
+		if(!empty($this->filter))
+			$managerOptions['filter'] = $this->filter;
 
-        $managerOptions['callback'] = $this->options['id'];
+		$managerOptions['callback'] = $this->options['id'];
 
 		if(!empty($this->language))
 			$managerOptions['lang'] = $this->language;
 
-        if (!empty($this->multiple))
-            $managerOptions['multiple'] = $this->multiple;
+		if (!empty($this->multiple))
+			$managerOptions['multiple'] = $this->multiple;
 
 		if(!empty($this->path))
 			$managerOptions['path'] = $this->path;
 
-        $this->_managerOptions['url'] = ElFinder::getManagerUrl($this->controller, $managerOptions);
-        $this->_managerOptions['width'] = $this->width;
-        $this->_managerOptions['height'] = $this->height;
-        $this->_managerOptions['id'] = $this->options['id'];
-    }
+		$this->_managerOptions['url'] = ElFinder::getManagerUrl($this->controller, $managerOptions);
+		$this->_managerOptions['width'] = $this->width;
+		$this->_managerOptions['height'] = $this->height;
+		$this->_managerOptions['id'] = $this->options['id'];
+	}
 
-    /**
-     * Runs the widget.
-     */
-    public function run()
-    {
-        if ($this->hasModel()) {
-            $replace['{input}'] = Html::activeTextInput($this->model, $this->attribute, $this->options);
-        } else {
-            $replace['{input}'] = Html::textInput($this->name, $this->value, $this->options);
-        }
+	/**
+	 * Runs the widget.
+	 */
+	public function run()
+	{
+		if ($this->hasModel()) {
+			$replace['{input}'] = Html::activeTextInput($this->model, $this->attribute, $this->options);
+		} else {
+			$replace['{input}'] = Html::textInput($this->name, $this->value, $this->options);
+		}
 
-        $replace['{button}'] = Html::tag($this->buttonTag,$this->buttonName, $this->buttonOptions);
+		$replace['{button}'] = Html::tag($this->buttonTag,$this->buttonName, $this->buttonOptions);
 
 
-        echo strtr($this->template, $replace);
+		echo strtr($this->template, $replace);
 
 		AssetsCallBack::register($this->getView());
 
-        if (!empty($this->multiple))
-            $this->getView()->registerJs("mihaildev.elFinder.register(" . Json::encode($this->options['id']) . ", function(files, id){ var _f = []; for (var i in files) { _f.push(files[i].url); } \$('#' + id).val(_f.join(', ')).trigger('change'); return true;}); $(document).on('click','#" . $this->buttonOptions['id'] . "', function(){mihaildev.elFinder.openManager(" . Json::encode($this->_managerOptions) . ");});");
-        else
-            $this->getView()->registerJs("mihaildev.elFinder.register(" . Json::encode($this->options['id']) . ", function(file, id){ \$('#' + id).val(file.url).trigger('change');; return true;}); $(document).on('click', '#" . $this->buttonOptions['id'] . "', function(){mihaildev.elFinder.openManager(" . Json::encode($this->_managerOptions) . ");});");
-
-    }
+		if (!empty($this->multiple))
+			$this->getView()->registerJs("mihaildev.elFinder.register(" . Json::encode($this->options['id']) . ", function(files, id){ var _f = []; for (var i in files) { _f.push(files[i].url); } \$('#' + id).val(_f.join(', ')).trigger('change'); return true;}); $(document).on('click','#" . $this->buttonOptions['id'] . "', function(){mihaildev.elFinder.openManager(" . Json::encode($this->_managerOptions) . ");});");
+		else
+			$this->getView()->registerJs("mihaildev.elFinder.register(" . Json::encode($this->options['id']) . ", function(file, id){ \$('#' + id).val(file.url).trigger('change');; return true;}); $(document).on('click', '#" . $this->buttonOptions['id'] . "', function(){mihaildev.elFinder.openManager(" . Json::encode($this->_managerOptions) . ");});");
+	}
 }

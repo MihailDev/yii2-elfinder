@@ -55,18 +55,6 @@ class S3Path extends BasePath{
 
 		if($options['defaults']['write'])
 			$options['acl'] .= '-write';
-
-		/*unset($options['attributes']);
-		unset($options['tmbPath']);
-		unset($options['tmpPath']);
-		unset($options['defaults']);
-		unset($options['alias']);
-		unset($options['imgLib']);
-		unset($options['mimeDetect']);*/
-
-		//var_export($options);
-
 		return $options;
 	}
-
 }

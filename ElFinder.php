@@ -19,25 +19,25 @@ use yii\helpers\Json;
 
 class ElFinder extends BaseWidjet{
 
-    public $language;
+	public $language;
 
-    public $filter;
+	public $filter;
 
-    public $callbackFunction;
+	public $callbackFunction;
 
 	public $path;// work with PathController
 
-    public $containerOptions = [];
-    public $frameOptions = [];
-    public $controller = 'elfinder';
+	public $containerOptions = [];
+	public $frameOptions = [];
+	public $controller = 'elfinder';
 
-    public static function getManagerUrl($controller, $params = [])
-    {
+	public static function getManagerUrl($controller, $params = [])
+	{
 		$params[0] = '/'.$controller."/manager";
-        return Yii::$app->urlManager->createUrl($params);
-    }
+		return Yii::$app->urlManager->createUrl($params);
+	}
 
-    public static function ckeditorOptions($controller, $options = []){
+	public static function ckeditorOptions($controller, $options = []){
 
 		if(is_array($controller)){
 			$id = $controller[0];
@@ -48,24 +48,24 @@ class ElFinder extends BaseWidjet{
 			$params = [];
 		}
 
-        return ArrayHelper::merge([
-            'filebrowserBrowseUrl' => self::getManagerUrl($id, $params),
-            'filebrowserImageBrowseUrl' => self::getManagerUrl($id, ArrayHelper::merge($params, ['filter'=>'image'])),
-            'filebrowserFlashBrowseUrl' => self::getManagerUrl($id, ArrayHelper::merge($params, ['filter'=>'flash'])),
-        ], $options);
-    }
+		return ArrayHelper::merge([
+			'filebrowserBrowseUrl' => self::getManagerUrl($id, $params),
+			'filebrowserImageBrowseUrl' => self::getManagerUrl($id, ArrayHelper::merge($params, ['filter'=>'image'])),
+			'filebrowserFlashBrowseUrl' => self::getManagerUrl($id, ArrayHelper::merge($params, ['filter'=>'flash'])),
+		], $options);
+	}
 
-    public function init()
-    {
-        if(empty($this->language))
-            $this->language = self::getSupportedLanguage(Yii::$app->language);
+	public function init()
+	{
+		if(empty($this->language))
+			$this->language = self::getSupportedLanguage(Yii::$app->language);
 
-        $managerOptions = [];
-        if(!empty($this->filter))
-            $managerOptions['filter'] = $this->filter;
+		$managerOptions = [];
+		if(!empty($this->filter))
+			$managerOptions['filter'] = $this->filter;
 
-        if(!empty($this->callbackFunction))
-            $managerOptions['callback'] = $this->id;
+		if(!empty($this->callbackFunction))
+			$managerOptions['callback'] = $this->id;
 
 		if(!empty($this->language))
 			$managerOptions['lang'] = $this->language;
@@ -73,48 +73,47 @@ class ElFinder extends BaseWidjet{
 		if(!empty($this->path))
 			$managerOptions['path'] = $this->path;
 
-        $this->frameOptions['src'] = $this->getManagerUrl($this->controller, $managerOptions);
+		$this->frameOptions['src'] = $this->getManagerUrl($this->controller, $managerOptions);
 
-        if(!isset($this->frameOptions['style'])){
-            $this->frameOptions['style'] = "width: 100%; height: 100%; border: 0;";
-        }
-    }
+		if(!isset($this->frameOptions['style'])){
+			$this->frameOptions['style'] = "width: 100%; height: 100%; border: 0;";
+		}
+	}
 
-    static function getSupportedLanguage($language)
-    {
-        $supportedLanguages = array('bg', 'jp', 'sk', 'cs', 'ko', 'th', 'de', 'lv', 'tr', 'el', 'nl', 'uk',
-            'es', 'no', 'vi', 'fr', 'pl', 'zh_CN', 'hr', 'pt_BR', 'zh_TW', 'hu', 'ro', 'it', 'ru', 'en');
+	static function getSupportedLanguage($language)
+	{
+		$supportedLanguages = array('bg', 'jp', 'sk', 'cs', 'ko', 'th', 'de', 'lv', 'tr', 'el', 'nl', 'uk',
+			'es', 'no', 'vi', 'fr', 'pl', 'zh_CN', 'hr', 'pt_BR', 'zh_TW', 'hu', 'ro', 'it', 'ru', 'en');
 
-        if(!in_array($language, $supportedLanguages)){
-            if (strpos($language, '-')){
+		if(!in_array($language, $supportedLanguages)){
+			if (strpos($language, '-')){
 				$language = str_replace('-', '_', $language);
 				if(!in_array($language, $supportedLanguages)) {
 					$language = substr($language, 0, strpos($language, '_'));
 					if (!in_array($language, $supportedLanguages))
 						$language = false;
 				}
-            } else {
-                $language = false;
-            }
-        }
+			} else {
+				$language = false;
+			}
+		}
 
-        return $language;
-    }
+		return $language;
+	}
 
-    public function run()
-    {
-        $container = 'div';
-        if(isset($this->containerOptions['tag'])){
-            $container = $this->containerOptions['tag'];
-            unset($this->containerOptions['tag']);
-        }
+	public function run()
+	{
+		$container = 'div';
+		if(isset($this->containerOptions['tag'])){
+			$container = $this->containerOptions['tag'];
+			unset($this->containerOptions['tag']);
+		}
 
-        echo Html::tag($container, Html::tag('iframe','', $this->frameOptions), $this->containerOptions);
+		echo Html::tag($container, Html::tag('iframe','', $this->frameOptions), $this->containerOptions);
 
-        if(!empty($this->callbackFunction)){
+		if(!empty($this->callbackFunction)){
 			AssetsCallBack::register($this->getView());
-            $this->getView()->registerJs("mihaildev.elFinder.register(".Json::encode($this->id).",".Json::encode($this->callbackFunction).");");
-        }
-    }
-
-} 
+			$this->getView()->registerJs("mihaildev.elFinder.register(".Json::encode($this->id).",".Json::encode($this->callbackFunction).");");
+		}
+	}
+}

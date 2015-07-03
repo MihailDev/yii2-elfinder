@@ -21,33 +21,33 @@ use yii\helpers\ArrayHelper;
 
 
 class Controller extends BaseController{
-    public $roots = [];
-    public $disabledCommands = ['netmount'];
+	public $roots = [];
+	public $disabledCommands = ['netmount'];
 	public $watermark;
 
-    private $_options;
+	private $_options;
 
-    public function getOptions()
-    {
-        if($this->_options !== null)
-            return $this->_options;
+	public function getOptions()
+	{
+		if($this->_options !== null)
+			return $this->_options;
 
-        $this->_options['roots'] = [];
+		$this->_options['roots'] = [];
 
-        foreach($this->roots as $root){
-            if(is_string($root))
-                $root = ['path' => $root];
+		foreach($this->roots as $root){
+			if(is_string($root))
+				$root = ['path' => $root];
 
-            if(!isset($root['class']))
-                $root['class'] = 'mihaildev\elfinder\LocalPath';
+			if(!isset($root['class']))
+				$root['class'] = 'mihaildev\elfinder\LocalPath';
 
-            $root = Yii::createObject($root);
+			$root = Yii::createObject($root);
 
-            /** @var \mihaildev\elfinder\LocalPath $root*/
+			/** @var \mihaildev\elfinder\LocalPath $root*/
 
-            if($root->isAvailable())
-                $this->_options['roots'][] = $root->getRoot();
-        }
+			if($root->isAvailable())
+				$this->_options['roots'][] = $root->getRoot();
+		}
 
 		if(!empty($this->watermark)){
 			$this->_options['bind']['upload.presave'] = 'Plugin.Watermark.onUpLoadPreSave';
@@ -65,6 +65,6 @@ class Controller extends BaseController{
 
 		$this->_options = ArrayHelper::merge($this->_options, $this->connectOptions);
 
-        return $this->_options;
-    }
+		return $this->_options;
+	}
 }
