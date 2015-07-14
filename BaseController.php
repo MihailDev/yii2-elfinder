@@ -28,6 +28,7 @@ use yii\web\JsExpression;
  */
 class BaseController extends Controller{
 	public $access = ['@'];
+	public $user = 'user';
 	public $managerOptions = [];
 	public $connectOptions = [];
 
@@ -35,6 +36,7 @@ class BaseController extends Controller{
 	{
 		return [
 			'access' => [
+				'user' => $this->user,
 				'class' => AccessControl::className(),
 				'rules' => [
 					[
