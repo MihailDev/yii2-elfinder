@@ -35,6 +35,8 @@ class InputFile extends InputWidget{
 
 	public $multiple;
 
+	public $startPath;
+
 	public function init()
 	{
 		parent::init();
@@ -62,7 +64,11 @@ class InputFile extends InputWidget{
 		if(!empty($this->path))
 			$managerOptions['path'] = $this->path;
 
-		$this->_managerOptions['url'] = ElFinder::getManagerUrl($this->controller, $managerOptions);
+		$params = $managerOptions;
+		if(!empty($this->startPath))
+			$params['#'] = ElFinder::genPathHash($this->startPath);
+
+		$this->_managerOptions['url'] = ElFinder::getManagerUrl($this->controller, $params);
 		$this->_managerOptions['width'] = $this->width;
 		$this->_managerOptions['height'] = $this->height;
 		$this->_managerOptions['id'] = $this->options['id'];
