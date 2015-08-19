@@ -94,7 +94,7 @@ class BaseController extends Controller{
 		}
 
 		if(!isset($options['lang']))
-			$options['lang'] = Yii::$app->language;
+			$options['lang'] = ElFinder::getSupportedLanguage(Yii::$app->language);
 
 		if(!empty($this->disabledCommands))
 			$options['commands'] = new JsExpression('ElFinderGetCommands('.Json::encode($this->disabledCommands).')');
