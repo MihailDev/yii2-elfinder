@@ -25,6 +25,8 @@ class ElFinder extends BaseWidjet{
 
 	public $callbackFunction;
 
+	public $multiple = false;
+	
 	public $path;// work with PathController
 	public $startPath;
 
@@ -101,7 +103,9 @@ class ElFinder extends BaseWidjet{
 		if(!empty($this->startPath))
 			$managerOptions['#'] = ElFinder::genPathHash($this->startPath);
 
-
+		if($this->multiple)
+			$managerOptions['multiple'] = $this->multiple;
+			
 		$this->frameOptions['src'] = $this->getManagerUrl($this->controller, $managerOptions);
 
 		if(!isset($this->frameOptions['style'])){
