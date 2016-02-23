@@ -24,6 +24,7 @@ class Controller extends BaseController{
 	public $roots = [];
 	public $disabledCommands = ['netmount'];
 	public $watermark;
+	public $plugins;
 
 	private $_options;
 
@@ -62,6 +63,13 @@ class Controller extends BaseController{
 
 			$this->_options['plugin']['Watermark'] = $watermark;
 		}
+		
+		if( !empty( $this->plugins ) ){
+	            foreach( $this->plugins as $pluginName=>$plugin ){
+	                $this->_options['bind']['upload.presave'][$pluginName] = 'Plugin.'.$pluginName.'.onUpLoadPreSave';
+	                $this->_options['plugin'][$pluginName] = $plugin;
+	            }
+	        }
 
 		$this->_options = ArrayHelper::merge($this->_options, $this->connectOptions);
 

@@ -1,8 +1,8 @@
 {
-    "name": "mihaildev/yii2-elfinder",
+    "name": "fonclub/yii2-elfinder",
     "keywords": ["yii", "elfinder", "filemanager"],
     "description": "Yii2 ElFinder",
-    "homepage": "https://github.com/MihailDev/yii2-elfinder",
+    "homepage": "https://github.com/fonclub/yii2-elfinder",
     "type": "yii2-extension",
     "license": "BSD-3-Clause",
     "minimum-stability":"stable",
@@ -15,11 +15,12 @@
         }
     ],
     "autoload": {
-        "psr-4": {"mihaildev\\elfinder\\": ""}
+        "psr-4": {"fonclub\\elfinder\\": ""}
     },
     "require": {
         "ext-phar": "*",
-        "yiisoft/yii2-jui": "*"
+        "yiisoft/yii2-jui": "*",
+        "2amigos/yii2-transliterator-helper": "*"
     },
     "extra": {
       "asset-installer-paths": {
