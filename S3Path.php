@@ -12,6 +12,7 @@
 */
 
 namespace mihaildev\elfinder;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class S3Path
@@ -29,13 +30,16 @@ class S3Path extends BasePath{
 		$options = parent::getRoot();
 		$options['separator'] = '/';
 
-		$options['s3']= [
+		if(empty($options['s3']))
+			$options['s3'] = [];
+
+		$options['s3'] = ArrayHelper::merge([
 			'key' => $this->accessKey,
 			'secret' => $this->secretKey,
 			'region' => $this->region,
 			'scheme' => 'http',
 			'ssl.certificate_authority' => false
-		];
+		], $options['s3']);
 
 		$options['bucket'] = $this->bucket;
 
@@ -55,6 +59,7 @@ class S3Path extends BasePath{
 
 		if($options['defaults']['write'])
 			$options['acl'] .= '-write';
+
 		return $options;
 	}
 }
