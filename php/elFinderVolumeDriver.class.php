@@ -207,7 +207,7 @@ abstract class elFinderVolumeDriver {
 		// if true - join new and old directories content on paste
 		'copyJoin'        => true,
 		// on upload -  if true - old file will be replaced with new one, if false new file get name - original_name-number.ext
-		'uploadOverwrite' => true,
+		'uploadOverwrite' => false,
 		// mimetypes allowed to upload
 		'uploadAllow'     => array(),
 		// mimetypes not allowed to upload
