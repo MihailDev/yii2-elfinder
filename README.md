@@ -38,7 +38,7 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
                     'name' => 'Global'
                 ],
                 [
-                    'class' => 'mihaildev\elfinder\UserPath',
+                    'class' => 'mihaildev\elfinder\volume\UserPath',
                     'path'  => 'files/user_{id}',
                     'name'  => 'My Documents'
                 ],
@@ -86,6 +86,26 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
 		]
     ],
 ```
+
+На данный момент реализованно использование только LocalFileSystem хранилища (mihaildev\elfinder\volume\Local и mihaildev\elfinder\volume\UserPath)
+для использования остальных вам прийдётся всё настраивать через mihaildev\elfinder\volume\Base
+также добавленно расширение  https://github.com/MihailDev/yii2-elfinder-flysystem/ это дополнение позволяет интегрировать Flysystem хранилища такие как
+    Local
+    Azure
+    AWS S3 V2
+    AWS S3 V3
+    Copy.com
+    Dropbox
+    FTP
+    GridFS
+    Memory
+    Null / Test
+    Rackspace
+    ReplicateAdapter
+    SFTP
+    WebDAV
+    PHPCR
+    ZipArchive
 
 ## Использование
 
@@ -211,3 +231,17 @@ mihaildev\elfinder\Assets::noConflict($this);
 ## Полезные ссылки
 
 ElFinder Wiki - https://github.com/Studio-42/elFinder/wiki
+
+Flysystem
+
+https://github.com/MihailDev/yii2-elfinder-flysystem/
+
+https://github.com/barryvdh/elfinder-flysystem-driver
+
+https://github.com/creocoder/yii2-flysystem
+
+http://flysystem.thephpleague.com/
+
+
+
+
