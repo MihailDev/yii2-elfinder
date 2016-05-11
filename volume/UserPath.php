@@ -4,11 +4,11 @@
  * Time: 14:13
  */
 
-namespace mihaildev\elfinder;
+namespace mihaildev\elfinder\volume;
 
 use Yii;
 
-class UserPath extends LocalPath{
+class UserPath extends Local{
 	public function isAvailable(){
 		if(Yii::$app->user->isGuest)
 			return false;

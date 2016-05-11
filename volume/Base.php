@@ -4,17 +4,18 @@
  * Time: 10:39
  */
 
-namespace mihaildev\elfinder;
+namespace mihaildev\elfinder\volume;
 
 use Yii;
-use yii\base\Component as BaseComponent;
+use yii\base\Object;
+use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 
 
 /**
  * @property array defaults
  */
-class BasePath extends BaseComponent{
+class Base extends Object{
 
 	public $driver = 'LocalFileSystem';
 
@@ -65,6 +66,10 @@ class BasePath extends BaseComponent{
 		return $this->_defaults;
 	}
 
+    protected function optionsModifier($options){
+        return $options;
+    }
+
 	public function getRoot(){
 		$options['driver'] = $this->driver;
 		$options['defaults'] = $this->getDefaults();
@@ -94,8 +99,8 @@ class BasePath extends BaseComponent{
 			'locked' => false
 		];
 
-		//var_export($options);exit;
+        $options = $this->optionsModifier($options);
 
-		return \yii\helpers\ArrayHelper::merge($options, $this->options);
+		return ArrayHelper::merge($options, $this->options);
 	}
 }

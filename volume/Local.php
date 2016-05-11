@@ -4,11 +4,11 @@
  * Time: 22:47
  */
 
-namespace mihaildev\elfinder;
+namespace mihaildev\elfinder\volume;
 
 use Yii;
 
-class LocalPath extends BasePath{
+class Local extends Base{
 	public $path;
 
 	public $baseUrl = '@web';
@@ -28,9 +28,7 @@ class LocalPath extends BasePath{
 		return $path;
 	}
 
-	public function getRoot(){
-
-		$options = parent::getRoot();
+	protected function optionsModifier($options){
 
 		$options['path'] = $this->getRealPath();
 		$options['URL'] = $this->getUrl();
