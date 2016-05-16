@@ -5,6 +5,8 @@ ElFinder — файловый менеджер для сайта.
 
 ## Поддерживаемые хранилища
 
+mihaildev/yii2-elfinder-flysystem - https://github.com/MihailDev/yii2-elfinder-flysystem/
+
 ```
     Local
     Azure
