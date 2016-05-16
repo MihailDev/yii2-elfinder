@@ -3,6 +3,27 @@ ElFinder Расширение для Yii 2
 
 ElFinder — файловый менеджер для сайта.
 
+## Поддерживаемые хранилища
+
+```
+    Local
+    Azure
+    AWS S3 V2
+    AWS S3 V3
+    Copy.com
+    Dropbox
+    FTP
+    GridFS
+    Memory
+    Null / Test
+    Rackspace
+    ReplicateAdapter
+    SFTP
+    WebDAV
+    PHPCR
+    ZipArchive
+```
+
 
 ## Установка
 
