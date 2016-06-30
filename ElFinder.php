@@ -50,7 +50,7 @@ class ElFinder extends BaseWidjet{
 			$volume = 1;
 		}
 		$hash = rtrim(strtr(base64_encode($path), '+/=', '-_.'), '.');
-		return 'elf_l' . $volume .'_' . $hash;
+		return 'elf_fls' . $volume .'_' . $hash;
 	}
 
 	public static function getManagerUrl($controller, $params = [])
