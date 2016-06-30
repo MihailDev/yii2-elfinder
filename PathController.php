@@ -52,6 +52,9 @@ class PathController extends BaseController{
 		if(!isset($root['class']))
 			$root['class'] = Local::className();
 
+		if(!isset($root['path']))
+			$root['path'] = '';
+
 		if(!empty($subPath)){
 			if(preg_match("/\./i", $subPath)){
 				$root['path'] = rtrim($root['path'], '/');
@@ -61,7 +64,6 @@ class PathController extends BaseController{
 				$root['path'] .= '/' . trim($subPath, '/');
 			}
 		}
-
 
 		$root = Yii::createObject($root);
 
