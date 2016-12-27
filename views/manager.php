@@ -21,6 +21,9 @@ $options['soundPath'] = Assets::getSoundPathUrl();
 $this->registerJs("
 function ElFinderGetCommands(disabled){
     var Commands = elFinder.prototype._options.commands;
+    if ($.inArray('*', Commands) === 0) {
+        Commands = Object.keys(elFinder.prototype.commands);
+    }
     $.each(disabled, function(i, cmd) {
         (idx = $.inArray(cmd, Commands)) !== -1 && Commands.splice(idx,1);
     });
