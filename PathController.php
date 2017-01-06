@@ -24,14 +24,8 @@ use Yii;
  */
 class PathController extends BaseController{
 	public $disabledCommands = ['netmount'];
-	public $root = [
-		'baseUrl' => '@web/files',
-		'basePath' => '@webroot/files',
-		'path' => ''
-	];
+	public $root = [];
 	public $watermark;
-
-
 
 	private $_options;
 

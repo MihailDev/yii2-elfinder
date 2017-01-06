@@ -27,6 +27,8 @@ class Base extends Object{
 
 	public $tmbPath;
 
+	public $plugin = [];
+
 	public function getAlias(){
 		if(is_array($this->name)){
 			return Yii::t($this->name['category'], $this->name['message']);
@@ -72,6 +74,7 @@ class Base extends Object{
 
 	public function getRoot(){
 		$options['driver'] = $this->driver;
+		$options['plugin'] = $this->plugin;
 		$options['defaults'] = $this->getDefaults();
 		$options['alias'] = $this->getAlias();
 

@@ -110,6 +110,9 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
     ],
 ```
 
+Разница между PathController и Controller в том что PathController работает только с одной папкой также имеет доп возможность передать в запросе на открытие под деритории
+
+
 На данный момент реализованно использование только LocalFileSystem хранилища (mihaildev\elfinder\volume\Local и mihaildev\elfinder\volume\UserPath)
 для использования остальных вам прийдётся всё настраивать через mihaildev\elfinder\volume\Base
 также добавленно расширение  https://github.com/MihailDev/yii2-elfinder-flysystem/ это дополнение позволяет интегрировать Flysystem хранилища такие как
@@ -129,6 +132,81 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
     WebDAV
     PHPCR
     ZipArchive
+
+## Настройка Плагинов
+Изза сложной настройки была переделанна работа плагинов но возможность использовать старые плагины присутствует
+```php
+'controllerMap' => [
+        'elfinder' => [
+            'class' => 'mihaildev\elfinder\Controller',
+            //'plugin' => ['\mihaildev\elfinder\plugin\Sluggable'],
+            'plugin' => [
+                [
+                    'class'=>'\mihaildev\elfinder\plugin\Sluggable',
+                    'lowercase' => true,
+                    'replacement' => '-'
+                ]
+             ],
+             'roots' => [
+                             [
+                                 'baseUrl'=>'@web',
+                                 'basePath'=>'@webroot',
+                                 'path' => 'files/global',
+                                 'name' => 'Global',
+                                 'plugin' => [
+                                        'Sluggable' => [
+                                            'lowercase' => false,
+                                        ]
+                                 ]
+                             ],
+                         ]
+
+```
+
+Настройка старого плагина (на примере плагина Sanitizer)
+```php
+'controllerMap' => [
+        'elfinder' => [
+            'class' => 'mihaildev\elfinder\Controller',
+            'connectOptions' => [
+                'bind' => [
+                    'upload.pre mkdir.pre mkfile.pre rename.pre archive.pre ls.pre' => array(
+                        'Plugin.Sanitizer.cmdPreprocess'
+                    ),
+                    'ls' => array(
+                        'Plugin.Sanitizer.cmdPostprocess'
+                    ),
+                    'upload.presave' => array(
+                        'Plugin.Sanitizer.onUpLoadPreSave'
+                    )
+                ],
+                'plugin' => [
+                    'Sanitizer' => array(
+                        'enable' => true,
+                        'targets'  => array('\\','/',':','*','?','"','<','>','|'), // target chars
+                        'replace'  => '_'    // replace to this
+                    )
+                ],
+            ],
+
+
+             'roots' => [
+                             [
+                                 'baseUrl'=>'@web',
+                                 'basePath'=>'@webroot',
+                                 'path' => 'files/global',
+                                 'name' => 'Global',
+                                 'plugin' => [
+                                        'Sanitizer' => array(
+                                                                'enable' => true,
+                                                                'targets'  => array('\\','/',':','*','?','"','<','>','|'), // target chars
+                                                                'replace'  => '_'    // replace to this
+                                                            )
+                                 ]
+                             ],
+                         ]
+
+```
 
 ## Использование
 

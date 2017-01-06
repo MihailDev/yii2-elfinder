@@ -31,6 +31,7 @@ class BaseController extends Controller{
 	public $user = 'user';
 	public $managerOptions = [];
 	public $connectOptions = [];
+	public $plugin = [];
 
 	public function behaviors()
 	{
@@ -53,7 +54,7 @@ class BaseController extends Controller{
 	}
 
 	public function actionConnect(){
-		return $this->renderFile(__DIR__."/views/connect.php", ['options'=>$this->getOptions()]);
+		return $this->renderFile(__DIR__."/views/connect.php", ['options'=>$this->getOptions(), 'plugin' => $this->plugin]);
 	}
 
 	public function getManagerOptions(){
