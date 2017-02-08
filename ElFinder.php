@@ -17,7 +17,8 @@ use yii\helpers\Json;
  * @package mihaildev\elfinder
  */
 
-class ElFinder extends BaseWidjet{
+class ElFinder extends BaseWidjet
+{
 
 	public $language;
 
@@ -34,7 +35,7 @@ class ElFinder extends BaseWidjet{
 	public $frameOptions = [];
 	public $controller = 'elfinder';
 
-	public static function genPathHash($path)
+	public static function getPathHash($path)
 	{
 		if(DIRECTORY_SEPARATOR != '/'){
 			$path = str_replace('/', DIRECTORY_SEPARATOR, $path);
@@ -71,7 +72,7 @@ class ElFinder extends BaseWidjet{
 		}
 
 		if(isset($params['startPath'])){
-			$params['#'] = ElFinder::genPathHash($params['startPath']);
+			$params['#'] = ElFinder::getPathHash($params['startPath']);
 			unset($params['startPath']);
 		}
 
@@ -101,7 +102,7 @@ class ElFinder extends BaseWidjet{
 			$managerOptions['path'] = $this->path;
 
 		if(!empty($this->startPath))
-			$managerOptions['#'] = ElFinder::genPathHash($this->startPath);
+			$managerOptions['#'] = ElFinder::getPathHash($this->startPath);
 
 		if($this->multiple)
 			$managerOptions['multiple'] = $this->multiple;
