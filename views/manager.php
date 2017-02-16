@@ -21,24 +21,24 @@ $options['soundPath'] = Assets::getSoundPathUrl();
 $this->registerJs("
 function ElFinderGetCommands(disabled){
     var Commands = elFinder.prototype._options.commands;
-    if ($.inArray('*', Commands) === 0) {
+    if (jQuery.inArray('*', Commands) === 0) {
         Commands = Object.keys(elFinder.prototype.commands);
     }
-    $.each(disabled, function(i, cmd) {
-        (idx = $.inArray(cmd, Commands)) !== -1 && Commands.splice(idx,1);
+    jQuery.each(disabled, function(i, cmd) {
+        (idx = jQuery.inArray(cmd, Commands)) !== -1 && Commands.splice(idx,1);
     });
     return Commands;
 }
 
     var winHashOld = '';
-    function elFinderFullscreen(){
+    function elFinderFullScreen(){
 
-        var width = $(window).width()-($('#elfinder').outerWidth(true) - $('#elfinder').width());
-        var height = $(window).height()-($('#elfinder').outerHeight(true) - $('#elfinder').height());
+        var width = jQuery(window).width()-(jQuery('#elfinder').outerWidth(true) - jQuery('#elfinder').width());
+        var height = jQuery(window).height()-(jQuery('#elfinder').outerHeight(true) - jQuery('#elfinder').height());
 
-        var el = $('#elfinder').elfinder('instance');
+        var el = jQuery('#elfinder').elfinder('instance');
 
-        var winhash = $(window).width() + '|' + $(window).height();
+        var winhash = jQuery(window).width() + '|' + jQuery(window).height();
 
 
         if(winHashOld == winhash)
@@ -49,12 +49,12 @@ function ElFinderGetCommands(disabled){
         el.resize(width, height);
     }
 
-    $('#elfinder').elfinder(".Json::encode($options).").elfinder('instance');
+    jQuery('#elfinder').elfinder(".Json::encode($options).").elfinder('instance');
 
-    $(window).resize(elFinderFullscreen);
+    jQuery(window).resize(elFinderFullScreen);
 
     elFinderFullscreen();
-    ");
+    "/*, \yii\web\View::POS_LOAD*/);
 
 
 $this->registerCss("

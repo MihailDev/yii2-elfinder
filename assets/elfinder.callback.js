@@ -6,11 +6,11 @@ mihaildev.elFinder = {
     openManager: function(options){
         var params = "menubar=no,toolbar=no,location=no,directories=no,status=no,fullscreen=no";
         if(options.width == 'auto'){
-            options.width = $(window).width()/1.5;
+            options.width = jQuery(window).width()/1.5;
         }
 
         if(options.height == 'auto'){
-            options.height = $(window).height()/1.5;
+            options.height = jQuery(window).height()/1.5;
         }
 
         params = params + ",width=" + options.width;
