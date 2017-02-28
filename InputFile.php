@@ -66,7 +66,7 @@ class InputFile extends InputWidget{
 
 		$params = $managerOptions;
 		if(!empty($this->startPath))
-			$params['#'] = ElFinder::genPathHash($this->startPath);
+			$params['#'] = ElFinder::getPathHash($this->startPath);
 
 		$this->_managerOptions['url'] = ElFinder::getManagerUrl($this->controller, $params);
 		$this->_managerOptions['width'] = $this->width;
