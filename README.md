@@ -221,6 +221,7 @@ echo InputFile::widget([
     'filter'     => 'image',    // фильтр файлов, можно задать массив фильтров https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#wiki-onlyMimes
     'name'       => 'myinput',
     'value'      => '',
+    'callbackFunction' => new JsExpression('function(file, id){}') // id - id виджета
 ]);
 
 echo $form->field($model, 'attribute')->widget(InputFile::className(), [
@@ -255,6 +256,7 @@ echo InputFile::widget([
     'filter'     => 'image',    // фильтр файлов, можно задать массив фильтров https://github.com/Studio-42/elFinder/wiki/Client-configuration-options#wiki-onlyMimes
     'name'       => 'myinput',
     'value'      => '',
+    'callbackFunction' => new JsExpression('function(file, id){}') // id - id виджета
 ]);
 
 echo $form->field($model, 'attribute')->widget(InputFile::className(), [
