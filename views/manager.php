@@ -53,7 +53,7 @@ function ElFinderGetCommands(disabled){
 
     jQuery(window).resize(elFinderFullScreen);
 
-    elFinderFullscreen();
+    elFinderFullScreen();
     "/*, \yii\web\View::POS_LOAD*/);
 
 
