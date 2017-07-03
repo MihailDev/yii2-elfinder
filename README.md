@@ -132,6 +132,29 @@ php composer.phar require --prefer-dist mihaildev/yii2-elfinder "*"
     WebDAV
     PHPCR
     ZipArchive
+    
+## Настройка callback-ов для событий 
+```php
+'controllerMap' => [
+        'elfinder' => [
+            ...            
+            'managerOptions' => [
+                ...
+                'handlers' => [
+                    'select' => 'function(event, elfinderInstance) {
+                                    console.log(event.data);
+                                    console.log(event.data.selected);
+                                }', 
+                    'open' => 'function(event, elfinderInstance) {...}',
+                ],
+                ...
+            ],
+            ...
+        ]
+    ],
+```
+
+список событий  - https://github.com/Studio-42/elFinder/wiki/Client-event-API#event-list
 
 ## Настройка Плагинов
 Изза сложной настройки была переделанна работа плагинов но возможность использовать старые плагины присутствует
