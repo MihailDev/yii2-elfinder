@@ -7,7 +7,7 @@
 namespace mihaildev\elfinder\volume;
 
 use Yii;
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 
@@ -15,7 +15,7 @@ use yii\helpers\FileHelper;
 /**
  * @property array defaults
  */
-class Base extends Object{
+class Base extends BaseObject{
 
 	public $driver = 'LocalFileSystem';
 
