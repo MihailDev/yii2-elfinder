@@ -100,6 +100,13 @@ class BaseController extends Controller{
 		if(!empty($this->disabledCommands))
 			$options['commands'] = new JsExpression('ElFinderGetCommands('.Json::encode($this->disabledCommands).')');
 
+        if(isset($this->managerOptions['handlers'])) {
+            $handlers = [];
+            foreach ($this->managerOptions['handlers'] as $event => $js) {
+                $handlers[$event] = new JsExpression($js);
+            }
+            $this->managerOptions['handlers'] = $handlers;
+        }
 
 		return ArrayHelper::merge($options, $this->managerOptions);
 	}
