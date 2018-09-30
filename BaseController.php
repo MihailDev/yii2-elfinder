@@ -74,6 +74,12 @@ class BaseController extends Controller{
 			$options['lang'] = $_GET['langCode'];
 		}
 
+		if(isset($_GET['tinymce'])){
+            $options['getFileCallback'] = new JsExpression('function(file, fm) { '.
+                'parent.tinymce.activeEditor.windowManager.getParams().oninsert(file, fm);'.
+                'parent.tinymce.activeEditor.windowManager.close();}');
+		}
+
 		if(isset($_GET['filter'])){
 			if(is_array($_GET['filter']))
 				$options['onlyMimes'] = $_GET['filter'];
