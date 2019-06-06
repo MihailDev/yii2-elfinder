@@ -22,7 +22,10 @@ class elFinderApi extends \elFinder
             foreach ($plugin->bind as $cmd => $methods) {
                 $doRegist = (strpos($cmd, '*') !== false);
                 if (! $doRegist) {
-                    $_getcmd = create_function('$cmd', 'list($ret) = explode(\'.\', $cmd);return trim($ret);');
+                    //$_getcmd = create_function('$cmd', 'list($ret) = explode(\'.\', $cmd);return trim($ret);');
+                    $_getcmd = function ($cmd) {
+                        list($ret) = explode('.', $cmd);return trim($ret);
+                    };
                     $doRegist = ($_reqCmd && in_array($_reqCmd, array_map($_getcmd, explode(' ', $cmd))));
                 }
                 if ($doRegist) {
