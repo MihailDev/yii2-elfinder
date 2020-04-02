@@ -94,7 +94,7 @@ class BaseController extends Controller{
 			if(isset($_GET['multiple']))
 				$options['commandsOptions']['getfile']['multiple'] = true;
 
-			$options['getFileCallback'] = new JsExpression('function(file){ '.
+			$options['getFileCallback'] = new JsExpression('function(file, elf){ '.
 				'if (window!=window.top) {var parent = window.parent;}else{var parent = window.opener;}'.
 				'if(parent.mihaildev.elFinder.callFunction('.Json::encode($_GET['callback']).', file))'.
 				'window.close(); }');
