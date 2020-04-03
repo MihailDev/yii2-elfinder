@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Date: 22.01.14
+ * Date: 28.03.19
  * Time: 10:39
  */
 
@@ -11,56 +12,89 @@ use yii\base\BaseObject;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 
-
 /**
  * @property array defaults
  */
-class Base extends BaseObject{
-
+class Base extends BaseObject
+{
+    /**
+     * @var string
+     */
 	public $driver = 'LocalFileSystem';
 
+    /**
+     * @var string
+     */
 	public $name = 'Root';
 
+    /**
+     * @var array
+     */
 	public $options = [];
 
+    /**
+     * @var array
+     */
 	public $access = ['read' => '*', 'write' => '*'];
 
+    /**
+     * @var string
+     */
 	public $tmbPath;
 
+    /**
+     * @var array
+     */
 	public $plugin = [];
 
-	public function getAlias(){
-		if(is_array($this->name)){
+    /**
+     * @var array
+     */
+	private $_defaults;
+
+    /**
+     * @return string
+     */
+	public function getAlias()
+    {
+		if (is_array($this->name)) {
 			return Yii::t($this->name['category'], $this->name['message']);
 		}
 
 		return $this->name;
 	}
 
-	public function isAvailable(){
+    /**
+     * @return bool
+     */
+	public function isAvailable()
+    {
 		return $this->defaults['read'];
 	}
 
-	private $_defaults;
-
-	public function getDefaults(){
-		if($this->_defaults !== null)
+    /**
+     * @return array
+     */
+	public function getDefaults()
+    {
+		if ($this->_defaults !== null)
 			return $this->_defaults;
+
 		$this->_defaults['read'] = false;
 		$this->_defaults['write'] = false;
 
-		if(isset($this->access['write'])){
+		if (isset($this->access['write'])) {
 			$this->_defaults['write'] = true;
-			if($this->access['write'] != '*'){
+			if ($this->access['write'] != '*') {
 				$this->_defaults['write'] = Yii::$app->user->can($this->access['write']);
 			}
 		}
 
-		if($this->_defaults['write']){
+		if ($this->_defaults['write']) {
 			$this->_defaults['read'] = true;
-		}elseif(isset($this->access['read'])){
+		} elseif (isset($this->access['read'])) {
 			$this->_defaults['read'] = true;
-			if($this->access['read'] != '*'){
+			if ($this->access['read'] != '*') {
 				$this->_defaults['read'] = Yii::$app->user->can($this->access['read']);
 			}
 		}
@@ -68,25 +102,34 @@ class Base extends BaseObject{
 		return $this->_defaults;
 	}
 
-    protected function optionsModifier($options){
+    /**
+     * @param array $options
+     * @return array
+     */
+    protected function optionsModifier($options)
+    {
         return $options;
     }
 
-	public function getRoot(){
+    /**
+     * @return array
+     */
+	public function getRoot()
+    {
 		$options['driver'] = $this->driver;
 		$options['plugin'] = $this->plugin;
 		$options['defaults'] = $this->getDefaults();
 		$options['alias'] = $this->getAlias();
 
 		$options['tmpPath'] = Yii::getAlias('@runtime/elFinderTmpPath');
-		if(!empty($this->tmbPath)){
+		if (!empty($this->tmbPath)) {
 			$this->tmbPath = trim($this->tmbPath, '/');
-			$options['tmbPath'] = \Yii::getAlias('@webroot/'.$this->tmbPath);
-			$options['tmbURL'] = \Yii::$app->request->hostInfo.\Yii::getAlias('@web/'.$this->tmbPath);
+			$options['tmbPath'] = Yii::getAlias('@webroot/' . $this->tmbPath);
+			$options['tmbURL'] = Yii::$app->request->hostInfo . Yii::getAlias('@web/'.$this->tmbPath);
 		}else{
-			$subPath = md5($this->className().'|'.serialize($this->name));
-			$options['tmbPath'] = Yii::$app->assetManager->getPublishedPath(__DIR__).DIRECTORY_SEPARATOR.$subPath;
-			$options['tmbURL'] = \Yii::$app->request->hostInfo.Yii::$app->assetManager->getPublishedUrl(__DIR__).'/'.$subPath;
+			$subPath = md5($this->className() . '|' . serialize($this->name));
+			$options['tmbPath'] = Yii::$app->assetManager->getPublishedPath(__DIR__) . DIRECTORY_SEPARATOR . $subPath;
+			$options['tmbURL'] = Yii::$app->request->hostInfo . Yii::$app->assetManager->getPublishedUrl(__DIR__) . '/' . $subPath;
 		}
 
 		FileHelper::createDirectory($options['tmbPath']);
@@ -99,7 +142,7 @@ class Base extends BaseObject{
 			'read' => false,
 			'write' => false,
 			'hidden' => true,
-			'locked' => false
+			'locked' => false,
 		];
 
         $options = $this->optionsModifier($options);
